@@ -74,4 +74,50 @@ public class RoomDAO {
         return rooms;
     }
 
+    public Room findRoomById(Long id) {
+        String sql = "SELECT * FROM phong WHERE ma_phong = ?";
+        try (Connection conn = DAOConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Room room = new Room();
+                    room.setID(rs.getLong("ma_phong"));
+                    room.setTenPhong(rs.getString("ten_phong"));
+                    room.setKichThuoc(rs.getString("kich_thuoc"));
+                    room.setTinhNang(rs.getString("tinh_nang"));
+                    room.setTrangThai(TinhTrang.valueOf(rs.getString("trang_thai")));
+                    room.setLoaiPhong(LoaiPhong.valueOf(rs.getString("loai_phong")));
+                    room.setGiaPhong(rs.getLong("gia_phong"));
+                    return room;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void capNhatTrangThai(Long phongId, TinhTrang trangThaiMoi) {
+        String sql = "UPDATE phong SET trang_thai = ? WHERE ma_phong = ?";
+
+        try (Connection conn = DAOConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, trangThaiMoi.name());
+            stmt.setLong(2, phongId);
+
+            int rows = stmt.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println("Cập nhật trạng thái phòng thành công!");
+            } else {
+                System.out.println("Không tìm thấy phòng để cập nhật!");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

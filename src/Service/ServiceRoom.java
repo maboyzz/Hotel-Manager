@@ -5,9 +5,6 @@ import Model.Room;
 import constant.LoaiPhong;
 import constant.TinhTrang;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;

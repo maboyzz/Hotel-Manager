@@ -1,5 +1,6 @@
 import Model.Room;
 import Service.ServiceCustomer;
+import Service.ServiceDatPhong;
 import Service.ServiceRoom;
 import java.util.Scanner;
 
@@ -7,6 +8,7 @@ public class Main {
     public static void main(String[] args) {
         ServiceRoom servicePhong = new ServiceRoom();
         ServiceCustomer serviceCustomer = new ServiceCustomer();
+        ServiceDatPhong serviceDatPhong = new ServiceDatPhong();
         
         Scanner sc = new Scanner(System.in);
         String filePath = "output.xlsx";
@@ -25,7 +27,7 @@ public class Main {
 
             switch (choice) {
                 case "1":
-                    handleSQLMenu(serviceCustomer, servicePhong, sc);
+                    handleSQLMenu(serviceDatPhong, serviceCustomer, servicePhong, sc);
                     break;
                 case "2":
                     handleExcelMenu(serviceCustomer, servicePhong, sc);
@@ -59,7 +61,7 @@ public class Main {
         System.out.println("6. Quay lại");
     }
 
-    private static void handleSQLMenu(ServiceCustomer serviceCustomer, ServiceRoom servicePhong, Scanner sc) {
+    private static void handleSQLMenu(ServiceDatPhong serviceDatPhong, ServiceCustomer serviceCustomer, ServiceRoom servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
             displaySubMenu();
@@ -74,10 +76,8 @@ public class Main {
                         break;
                     case 2:
                         System.out.println("Thuê phòng (SQL)");
-                        serviceCustomer.addCustomerSQL();
-                        System.out.println("Còn các phòng : ");
-                        servicePhong.timPhongtrong();
-                        System.out.println("Nhập Mã Phòng bạn chọn");
+                        serviceDatPhong.taoKhachVaDatPhong();
+
                         break;
                     case 3:
                         System.out.println("Xem thông tin khách hàng (SQL)");

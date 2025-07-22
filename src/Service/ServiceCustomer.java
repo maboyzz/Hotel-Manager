@@ -71,11 +71,11 @@ public class ServiceCustomer {
 
         return customer;
     }
-    public void addCustomerSQL() {
+    public Customer addCustomerSQL() {
         System.out.println("Nhập thông tin khách hàng : ");
         Customer customer = inputCustomerInfo();
         new CustomerDAO().insertCustomer(customer);
-        System.out.println("Đã thêm khách hàng vào database :  " + customer);
+        return customer;
     }
     public void searchCustomerSQL() {
 
