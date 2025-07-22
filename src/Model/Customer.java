@@ -21,4 +21,14 @@ public class Customer extends Person{
     public void setSoNguoi(int soNguoi) {
         this.soNguoi = soNguoi;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "Họ tên='" + getTen() + '\'' +
+                ", Năm sinh='" + getNamSinh() + '\'' +
+                ", CCCD='" + getCCCD() + '\'' +
+                ", Số người=" + soNguoi +
+                '}';
+    }
 }

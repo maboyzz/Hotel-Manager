@@ -1,17 +1,20 @@
 import Model.Room;
+import Service.ServiceCustomer;
 import Service.ServiceRoom;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        ServiceRoom serviceDatPhong = new ServiceRoom();
+        ServiceRoom servicePhong = new ServiceRoom();
+        ServiceCustomer serviceCustomer = new ServiceCustomer();
+        
         Scanner sc = new Scanner(System.in);
         String filePath = "output.xlsx";
         boolean isExit = false;
 
         // Thêm ShutdownHook để lưu danh sách phòng vào Excel khi thoát chương trình
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            serviceDatPhong.luuDanhSachPhong(filePath);
+            servicePhong.luuDanhSachPhong(filePath);
             System.out.println("Danh sách phòng đã được lưu vào " + filePath);
         }));
 
@@ -22,10 +25,10 @@ public class Main {
 
             switch (choice) {
                 case "1":
-                    handleSQLMenu(serviceDatPhong, sc);
+                    handleSQLMenu(serviceCustomer, servicePhong, sc);
                     break;
                 case "2":
-                    handleExcelMenu(serviceDatPhong, sc);
+                    handleExcelMenu(serviceCustomer, servicePhong, sc);
                     break;
                 case "3":
                     isExit = true;
@@ -56,7 +59,7 @@ public class Main {
         System.out.println("6. Quay lại");
     }
 
-    private static void handleSQLMenu(ServiceRoom service, Scanner sc) {
+    private static void handleSQLMenu(ServiceCustomer serviceCustomer, ServiceRoom servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
             displaySubMenu();
@@ -67,11 +70,14 @@ public class Main {
                 switch (choice) {
                     case 1:
                         System.out.println("Tìm kiếm phòng trống (SQL)");
-                        service.timPhongtrong();
+                        servicePhong.timPhongtrong();
                         break;
                     case 2:
                         System.out.println("Thuê phòng (SQL)");
-                        // Gọi hàm thanh toán phòng
+                        serviceCustomer.addCustomerSQL();
+                        System.out.println("Còn các phòng : ");
+                        servicePhong.timPhongtrong();
+                        System.out.println("Nhập Mã Phòng bạn chọn");
                         break;
                     case 3:
                         System.out.println("Lựa chọn dịch vụ (SQL)");
@@ -79,11 +85,11 @@ public class Main {
                         break;
                     case 4:
                         System.out.println("Hiển thị danh sách phòng (SQL)");
-                        service.timToanBoPhong();
+                        servicePhong.timToanBoPhong();
                         break;
                     case 5:
                         System.out.println("Thêm phòng mới (SQL)");
-                        service.addRoomsSQL();
+                        servicePhong.addRoomsSQL();
                         break;
                     case 6:
                         back = true;
@@ -99,7 +105,7 @@ public class Main {
         }
     }
 
-    private static void handleExcelMenu(ServiceRoom service, Scanner sc) {
+    private static void handleExcelMenu(ServiceCustomer serviceCustomer,ServiceRoom servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
             displaySubMenu();
@@ -110,7 +116,7 @@ public class Main {
                 switch (choice) {
                     case 1:
                         System.out.println("Tìm kiếm phòng trống (Excel)");
-                        service.timKiemPhongTrong();
+                        servicePhong.timKiemPhongTrong();
                         break;
                     case 2:
                         System.out.println("Thanh toán phòng (Excel)");
@@ -122,11 +128,11 @@ public class Main {
                         break;
                     case 4:
                         System.out.println("Hiển thị danh sách phòng (Excel)");
-                        service.searchRoomsExel();
+                        servicePhong.searchRoomsExel();
                         break;
                     case 5:
                         System.out.println("Thêm phòng mới (Excel)");
-                        service.addRoomsExel();
+                        servicePhong.addRoomsExel();
                         break;
                     case 6:
                         back = true;

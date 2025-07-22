@@ -50,4 +50,14 @@ public class Person {
     public void setCCCD(String CCCD) {
         this.CCCD = CCCD;
     }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "ID=" + ID +
+                ", ten='" + ten + '\'' +
+                ", namSinh='" + namSinh + '\'' +
+                ", CCCD='" + CCCD + '\'' +
+                '}';
+    }
 }
