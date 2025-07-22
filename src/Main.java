@@ -53,7 +53,7 @@ public class Main {
         System.out.println("\n=== Quản Lý Phòng ===");
         System.out.println("1. Tìm kiếm phòng trống");
         System.out.println("2. Thuê phòng");
-        System.out.println("3. Lựa chọn dịch vụ");
+        System.out.println("3. Xem thông tin khách hàng");
         System.out.println("4. Hiển thị danh sách phòng");
         System.out.println("5. Thêm phòng mới");
         System.out.println("6. Quay lại");
@@ -80,8 +80,8 @@ public class Main {
                         System.out.println("Nhập Mã Phòng bạn chọn");
                         break;
                     case 3:
-                        System.out.println("Lựa chọn dịch vụ (SQL)");
-                        // Gọi hàm lựa chọn dịch vụ
+                        System.out.println("Xem thông tin khách hàng (SQL)");
+                        serviceCustomer.searchCustomerSQL();
                         break;
                     case 4:
                         System.out.println("Hiển thị danh sách phòng (SQL)");

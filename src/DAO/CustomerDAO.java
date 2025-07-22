@@ -25,4 +25,28 @@ public class CustomerDAO {
             e.printStackTrace();
         }
     }
+    public List<Customer> TimTatCaKhachHang() {
+        List<Customer> customers = new ArrayList<>();
+        String sql = "SELECT * FROM khach_hang";
+
+        try (Connection conn = DAOConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Customer customer = new Customer();
+                customer.setID(rs.getLong("id"));
+                customer.setTen(rs.getString("ten"));
+                customer.setNamSinh(rs.getString("nam_sinh"));
+                customer.setCCCD(rs.getString("cccd"));
+                customer.setSoNguoi(rs.getInt("so_nguoi"));
+                customers.add(customer);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customers;
+    }
 }

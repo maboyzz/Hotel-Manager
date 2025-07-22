@@ -7,6 +7,7 @@ import Model.Room;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 import static Validator.CustomerValidator.*;
@@ -75,6 +76,17 @@ public class ServiceCustomer {
         Customer customer = inputCustomerInfo();
         new CustomerDAO().insertCustomer(customer);
         System.out.println("Đã thêm khách hàng vào database :  " + customer);
+    }
+    public void searchCustomerSQL() {
+
+        List<Customer> customers = new CustomerDAO().TimTatCaKhachHang();
+        if (customers.isEmpty()) {
+            System.out.println("Không có khách hàng nào");
+        } else {
+            for (Customer customer : customers) {
+                System.out.println(customer);
+            }
+        }
     }
 
 }
