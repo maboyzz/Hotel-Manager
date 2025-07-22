@@ -45,23 +45,23 @@ public class ServiceCustomer {
                 break;
             }
         } while (true);
-        do {
-            System.out.println("Enter customer phone: ");
-            phone = sc.nextLine();
-            if (!isInputBlank(phone)) {
-                customer.setPhone(phone);
-                break;
-            }
-        } while (true);
-
-        do {
-            System.out.println("Enter customer email: ");
-            email = sc.nextLine();
-            if (!isInputBlank(email)) {
-                customer.setEmail(email);
-                break;
-            }
-        } while (true);
+//        do {
+//            System.out.println("Enter customer phone: ");
+//            phone = sc.nextLine();
+//            if (!isInputBlank(phone)) {
+//                customer.setPhone(phone);
+//                break;
+//            }
+//        } while (true);
+//
+//        do {
+//            System.out.println("Enter customer email: ");
+//            email = sc.nextLine();
+//            if (!isInputBlank(email)) {
+//                customer.setEmail(email);
+//                break;
+//            }
+//        } while (true);
 
         return customer;
     }

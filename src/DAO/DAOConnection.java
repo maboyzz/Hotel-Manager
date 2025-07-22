@@ -5,9 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DAOConnection {
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/HotelManager";
+    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/hotel_manager";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "Huy31102003@";
+    private static final String PASSWORD = "Huy31102003";
 
     public static Connection getConnection() throws SQLException {
         try {

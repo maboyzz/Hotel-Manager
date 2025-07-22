@@ -10,15 +10,18 @@ public class Room {
     private String kichThuoc;
     private TinhTrang trangThai;
     private String tinhNang;
+    private long giaPhong;
 
-    public Room(Long ID, String tenPhong, LoaiPhong loaiPhong, String kichThuoc, TinhTrang trangThai, String tinhNang) {
+    public Room(Long ID, String tenPhong, String kichThuoc, LoaiPhong loaiPhong, TinhTrang trangThai, String tinhNang, long giaPhong) {
         this.ID = ID;
         this.tenPhong = tenPhong;
-        this.loaiPhong = loaiPhong;
         this.kichThuoc = kichThuoc;
+        this.loaiPhong = loaiPhong;
         this.trangThai = trangThai;
         this.tinhNang = tinhNang;
+        this.giaPhong = giaPhong;
     }
+
     public Room() {
     }
 
@@ -70,6 +73,14 @@ public class Room {
         this.tinhNang = tinhNang;
     }
 
+    public long getGiaPhong() {
+        return giaPhong;
+    }
+
+    public void setGiaPhong(long giaPhong) {
+        this.giaPhong = giaPhong;
+    }
+
     @Override
     public String toString() {
         return "Room{" +
@@ -79,6 +90,7 @@ public class Room {
                 ", kichThuoc='" + kichThuoc + '\'' +
                 ", trangThai=" + trangThai +
                 ", tinhNang='" + tinhNang + '\'' +
+                ", giaPhong=" + giaPhong +
                 '}';
     }
 }

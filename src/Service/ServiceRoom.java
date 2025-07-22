@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static DAO.ExportToExcel.exportToExcel;
+//import static DAO.ExportToExcel.exportToExcel;
 import static Validator.RoomValidator.isValidFullName;
 import static Validator.RoomValidator.isValidTinhNang;
 
@@ -121,6 +121,7 @@ public class ServiceRoom {
     public void addRoomsSQL() {
         System.out.println("Enter room information : ");
         Room room = inputRoomInfo();
+        room.setGiaPhong(tinhgiaphong(room.getLoaiPhong()));
         new RoomDAO().insertRoom(room);
         System.out.println("Room added to database: " + room);
     }
@@ -153,6 +154,7 @@ public class ServiceRoom {
         System.out.println("Enter room information : ");
         Room room = inputRoomInfo();
         room.setID(getMaxId() + 1);
+        room.setGiaPhong(tinhgiaphong(room.getLoaiPhong()));
         listRoom.add(room);
         System.out.println("Room added to" + room);
     }
@@ -177,7 +179,7 @@ public class ServiceRoom {
                     room.getTinhNang()
             });
         }
-        exportToExcel(data, filePath);
+       // exportToExcel(data, filePath);
         System.out.println("Danh sách phòng đã được lưu vào file: " + filePath);
     }
     public void timKiemPhongTrong() {
@@ -192,5 +194,20 @@ public class ServiceRoom {
         if (!found) {
             System.out.println("Khong tim thay phong trong");
         }
+    }
+    private long tinhgiaphong(LoaiPhong loaiPhong) {
+        long gia = 0L;
+        if (loaiPhong != null) {
+            if(loaiPhong.getDescription().equalsIgnoreCase("phòng đơn")){
+                gia = 100000;
+            } else if (loaiPhong.getDescription().equalsIgnoreCase("phòng đôi")) {
+                gia = 200000;
+            } else if (loaiPhong.getDescription().equalsIgnoreCase("phòng vip")) {
+                gia = 300000;
+            }else {
+                gia = 400000;
+            }
+        }
+        return gia;
     }
 }

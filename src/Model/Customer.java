@@ -6,8 +6,8 @@ public class Customer extends Person{
 
     private int soNguoi;
 
-    public Customer(Long ID, String ten, Date ngaySinh, String CCCD, int soNguoi) {
-        super(ID, ten, ngaySinh, CCCD);
+    public Customer(Long ID, String ten, String namSinh, String CCCD, int soNguoi) {
+        super(ID, ten, namSinh, CCCD);
         this.soNguoi = soNguoi;
     }
     public Customer() {
