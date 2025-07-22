@@ -1,5 +1,7 @@
 package Model;
 
+import constant.TrangThai;
+
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -10,14 +12,16 @@ public class DatPhong {
     private LocalDateTime thoiGianDat;
     private LocalDateTime thoiGianTra;
     private String ghiChu;
+    private TrangThai trangThai;
 
-    public DatPhong(Long id, Long maKhachHang, Long maPhong, LocalDateTime thoiGianDat, LocalDateTime thoiGianTra, String ghiChu) {
+    public DatPhong(Long id, Long maKhachHang, Long maPhong, LocalDateTime thoiGianDat, LocalDateTime thoiGianTra, String ghiChu, TrangThai trangThai) {
         this.id = id;
         this.maKhachHang = maKhachHang;
         this.maPhong = maPhong;
         this.thoiGianDat = thoiGianDat;
         this.thoiGianTra = thoiGianTra;
         this.ghiChu = ghiChu;
+        this.trangThai = trangThai;
     }
 
     public DatPhong() {
@@ -71,6 +75,13 @@ public class DatPhong {
         this.ghiChu = ghiChu;
     }
 
+    public TrangThai getTrangThai() {
+        return trangThai;
+    }
+
+    public void setTrangThai(TrangThai trangThai) {
+        this.trangThai = trangThai;
+    }
 
     @Override
     public String toString() {
@@ -81,6 +92,7 @@ public class DatPhong {
                 ", thoiGianDat=" + thoiGianDat +
                 ", thoiGianTra=" + thoiGianTra +
                 ", ghiChu='" + ghiChu + '\'' +
+                ", trangThai=" + trangThai+
                 '}';
     }
 }

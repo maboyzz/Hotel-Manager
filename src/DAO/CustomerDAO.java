@@ -83,4 +83,24 @@ public class CustomerDAO {
 
         return customers;
     }
+    public Customer selectCustomerById(Long id) {
+        String sql = "SELECT * FROM khach_hang WHERE id = ?";
+        Customer customer = null;
+        try (Connection conn = DAOConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                customer = new Customer();
+                customer.setID(rs.getLong("id"));
+                customer.setTen(rs.getString("ten"));
+                customer.setNamSinh(rs.getString("nam_sinh"));
+                customer.setCCCD(rs.getString("cccd"));
+                customer.setSoNguoi(rs.getInt("so_nguoi"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customer;
+    }
 }
