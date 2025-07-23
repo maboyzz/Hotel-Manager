@@ -90,21 +90,31 @@ public class Main {
             System.out.println("1. Tìm kiếm phòng trống");
             System.out.println("2. Hiển thị tất cả phòng");
             System.out.println("3. Thêm phòng mới");
-            System.out.println("4. Quay lại");
+            System.out.println("4. Cập nhật phòng");
+            System.out.println("5. Xóa phòng");
+            System.out.println("6. Quay lại");
             System.out.print("Nhập lựa chọn: ");
 
             String choice = sc.nextLine().trim();
             switch (choice) {
                 case "1":
-                    servicePhong.timPhongtrong();
+                    servicePhong.timPhongtrongSQL();
                     break;
                 case "2":
-                    servicePhong.timToanBoPhong();
+                    servicePhong.timToanBoPhongSQL();
                     break;
                 case "3":
                     servicePhong.addRoomsSQL();
                     break;
                 case "4":
+                    servicePhong.timToanBoPhongSQL();
+                    servicePhong.capNhatPhongSQL();
+                    break;
+                case "5":
+                    servicePhong.timToanBoPhongSQL();
+                    servicePhong.xoaPhongSQL();
+                    break;
+                case "6":
                     back = true;
                     break;
                 default:
@@ -155,7 +165,7 @@ public class Main {
                     break;
                 case "3":
                     serviceDatPhong.hienThiTatCaHoaDonChuaThanhToan();
-                        serviceDatPhong.traPhongVaThanhToan();
+                    serviceDatPhong.traPhongVaThanhToan();
 
                     break;
                 case "4":

@@ -43,6 +43,7 @@ public class RoomDAO {
                 room.setTinhNang(rs.getString("tinh_nang"));
                 room.setTrangThai(TinhTrang.valueOf(rs.getString("trang_thai")));
                 room.setLoaiPhong(LoaiPhong.valueOf(rs.getString("loai_phong")));
+                room.setGiaPhong(rs.getLong("gia_phong"));
                 rooms.add(room);
             }
         } catch (SQLException e) {
@@ -65,7 +66,7 @@ public class RoomDAO {
                 room.setTinhNang(rs.getString("tinh_nang"));
                 room.setTrangThai(TinhTrang.valueOf(rs.getString("trang_thai")));
                 room.setLoaiPhong(LoaiPhong.valueOf(rs.getString("loai_phong")));
-                room.setGiaPhong(Long.valueOf(rs.getLong("gia_phong")));
+                room.setGiaPhong(rs.getLong("gia_phong"));
                 rooms.add(room);
             }
         } catch (SQLException e) {
@@ -119,5 +120,50 @@ public class RoomDAO {
             e.printStackTrace();
         }
     }
+    public void capNhatPhong(Room room) {
+        String sql = "UPDATE phong SET ten_phong = ?, loai_phong = ?, gia_phong = ?, trang_thai = ?, kich_thuoc = ?, tinh_nang = ? WHERE ma_phong = ?";
 
+        try (Connection conn = DAOConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, room.getTenPhong());
+            stmt.setString(2, room.getLoaiPhong().name());
+            stmt.setLong(3, room.getGiaPhong());
+            stmt.setString(4, room.getTrangThai().name());
+            stmt.setString(5, room.getKichThuoc());
+            stmt.setString(6, room.getTinhNang());
+
+
+            stmt.setLong(7, room.getID());
+
+            int rows = stmt.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println("Cập nhật phòng thành công!");
+            } else {
+                System.out.println("Không tìm thấy phòng để cập nhật!");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void xoaPhong(Long phongId) {
+        String sql = "DELETE FROM phong WHERE ma_phong = ?";
+
+        try (Connection conn = DAOConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, phongId);
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                System.out.println("Xoa phòng thành công!");
+            } else {
+                System.out.println("Không tìm thấy phòng để xóa !");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

@@ -4,21 +4,24 @@ import DAO.RoomDAO;
 import Model.Room;
 import constant.LoaiPhong;
 import constant.TinhTrang;
+import constant.TrangThai;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 //import static DAO.ExportToExcel.exportToExcel;
-import static Validator.RoomValidator.isValidFullName;
-import static Validator.RoomValidator.isValidTinhNang;
+import static Validator.RoomValidator.*;
+
 
 public class ServiceRoom {
 
     ArrayList<Room> listRoom = new ArrayList<Room>();
+
     private boolean isInputBlank(String input) {
         return input == null || input.trim().isEmpty();
     }
+
     private boolean checkInput() {
         if (listRoom == null || listRoom.isEmpty()) {
             System.out.println("Error: No matching data.");
@@ -26,6 +29,7 @@ public class ServiceRoom {
         }
         return true;
     }
+
     private Room inputRoomInfo() {
         Room room = new Room();
         Scanner sc = new Scanner(System.in);
@@ -34,7 +38,6 @@ public class ServiceRoom {
         String kichThuoc;
         TinhTrang trangThai;
         String tinhNang;
-
 
 
         do {
@@ -99,6 +102,7 @@ public class ServiceRoom {
         } while (true);
         return room;
     }
+
     private Long getMaxId() {
 
 
@@ -114,7 +118,9 @@ public class ServiceRoom {
         return maxId;
 
     }
+
     Long ID = 0L;
+
     public void addRoomsSQL() {
         System.out.println("Enter room information : ");
         Room room = inputRoomInfo();
@@ -123,8 +129,7 @@ public class ServiceRoom {
         System.out.println("Room added to database: " + room);
     }
 
-    public void timPhongtrong() {
-
+    public void timPhongtrongSQL() {
 
         List<Room> rooms = new RoomDAO().TimPhongTrong();
         if (rooms.isEmpty()) {
@@ -135,7 +140,8 @@ public class ServiceRoom {
             }
         }
     }
-    public void timToanBoPhong() {
+
+    public void timToanBoPhongSQL() {
 
 
         List<Room> rooms = new RoomDAO().TimTatCaPhong();
@@ -147,6 +153,41 @@ public class ServiceRoom {
             }
         }
     }
+
+    public void capNhatPhongSQL() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Nhập mã Phòng :");
+        String idPhong = sc.nextLine();
+
+        if (!isInputBlank(idPhong) && isValidIDPhong(idPhong)) {
+            Room room = new RoomDAO().findRoomById(Long.parseLong(idPhong));
+            if (room != null) {
+                Room roomUpdate = inputRoomInfo();
+                roomUpdate.setID(room.getID());
+                roomUpdate.setGiaPhong(tinhgiaphong(roomUpdate.getLoaiPhong()));
+                new RoomDAO().capNhatPhong(roomUpdate);
+            } else {
+                System.out.println("Không tìm thấy phòng !!!");
+            }
+        }
+
+
+    }
+    public void xoaPhongSQL() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Nhập mã Phòng :");
+        String idPhong = sc.nextLine();
+
+        if (!isInputBlank(idPhong) && isValidIDPhong(idPhong)) {
+            Room room = new RoomDAO().findRoomById(Long.parseLong(idPhong));
+            if (room != null) {
+                new RoomDAO().xoaPhong(Long.parseLong(idPhong));
+            } else {
+                System.out.println("Không tìm thấy phòng !!!");
+            }
+        }
+    }
+
     public void addRoomsExel() {
         System.out.println("Enter room information : ");
         Room room = inputRoomInfo();
@@ -155,14 +196,16 @@ public class ServiceRoom {
         listRoom.add(room);
         System.out.println("Room added to" + room);
     }
+
     public void searchRoomsExel() {
         System.out.println("tất cả các phòng hiện có trong hệ thống : ");
-        if(listRoom != null ) {
+        if (listRoom != null) {
             for (Room room : listRoom) {
                 System.out.println("\n" + room.toString());
             }
         }
     }
+
     public void luuDanhSachPhong(String filePath) {
         List<String[]> data = new ArrayList<>();
         // Add room data to the list
@@ -176,9 +219,10 @@ public class ServiceRoom {
                     room.getTinhNang()
             });
         }
-       // exportToExcel(data, filePath);
+        // exportToExcel(data, filePath);
         System.out.println("Danh sách phòng đã được lưu vào file: " + filePath);
     }
+
     public void timKiemPhongTrong() {
         Scanner sc = new Scanner(System.in);
         boolean found = false;
@@ -192,16 +236,17 @@ public class ServiceRoom {
             System.out.println("Khong tim thay phong trong");
         }
     }
+
     private long tinhgiaphong(LoaiPhong loaiPhong) {
         long gia = 0L;
         if (loaiPhong != null) {
-            if(loaiPhong.getDescription().equalsIgnoreCase("phòng đơn")){
+            if (loaiPhong.getDescription().equalsIgnoreCase("phòng đơn")) {
                 gia = 100000;
             } else if (loaiPhong.getDescription().equalsIgnoreCase("phòng đôi")) {
                 gia = 200000;
             } else if (loaiPhong.getDescription().equalsIgnoreCase("phòng vip")) {
                 gia = 300000;
-            }else {
+            } else {
                 gia = 400000;
             }
         }
