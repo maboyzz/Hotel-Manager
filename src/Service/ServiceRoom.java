@@ -1,6 +1,7 @@
 package Service;
 
 import DAO.RoomDAO;
+import Model.Customer;
 import Model.Room;
 import constant.LoaiPhong;
 import constant.TinhTrang;
@@ -10,13 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-//import static DAO.ExportToExcel.exportToExcel;
+import static DAO.ExportToExcel.exportToExcel;
 import static Validator.RoomValidator.*;
 
 
 public class ServiceRoom {
 
-    ArrayList<Room> listRoom = new ArrayList<Room>();
+
+    static ArrayList<Room> listRoom = new ArrayList<Room>();
 
     private boolean isInputBlank(String input) {
         return input == null || input.trim().isEmpty();
@@ -104,8 +106,6 @@ public class ServiceRoom {
     }
 
     private Long getMaxId() {
-
-
         if (listRoom == null) {
             return 0L;
         }
@@ -116,7 +116,6 @@ public class ServiceRoom {
             }
         }
         return maxId;
-
     }
 
     Long ID = 0L;
@@ -216,14 +215,16 @@ public class ServiceRoom {
                     room.getLoaiPhong() != null ? room.getLoaiPhong().getDescription() : "",
                     room.getKichThuoc(),
                     room.getTrangThai() != null ? room.getTrangThai().getDescription() : "",
-                    room.getTinhNang()
+                    room.getTinhNang(),
+                    String.valueOf(room.getGiaPhong())
             });
         }
-        // exportToExcel(data, filePath);
+        String[] headers = {"ID Phòng", "Tên Phòng", "Loại Phòng", "Kich Thước", "Trạng Thái","Chức Năng","Giá Tiền"};
+        exportToExcel(data, headers,filePath);
         System.out.println("Danh sách phòng đã được lưu vào file: " + filePath);
     }
 
-    public void timKiemPhongTrong() {
+    public void timKiemPhongTrongExel() {
         Scanner sc = new Scanner(System.in);
         boolean found = false;
         for (Room room : listRoom) {
@@ -236,6 +237,7 @@ public class ServiceRoom {
             System.out.println("Khong tim thay phong trong");
         }
     }
+
 
     private long tinhgiaphong(LoaiPhong loaiPhong) {
         long gia = 0L;

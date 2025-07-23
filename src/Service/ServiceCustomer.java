@@ -1,21 +1,19 @@
 package Service;
 
 import DAO.CustomerDAO;
-import DAO.RoomDAO;
 import Model.Customer;
-import Model.Room;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import static DAO.ExportToExcel.exportToExcel;
 import static Validator.CustomerValidator.*;
 
 public class ServiceCustomer {
-    ArrayList<Customer> listCustomer = new ArrayList<Customer>();
+    static ArrayList<Customer> listCustomer = new ArrayList<Customer>();
 
-    private boolean isInputBlank(String input) {
+    private static boolean isInputBlank(String input) {
         return input == null || input.trim().isEmpty();
     }
 
@@ -27,7 +25,7 @@ public class ServiceCustomer {
         return true;
     }
 
-    private Customer inputCustomerInfo() {
+    private static Customer inputCustomerInfo() {
         Customer customer = new Customer();
         Scanner sc = new Scanner(System.in);
         String ten;
@@ -88,5 +86,47 @@ public class ServiceCustomer {
             }
         }
     }
-
+    public static Customer addCustomerExel(){
+        System.out.println("Enter room information : ");
+        Customer customer = inputCustomerInfo();
+        customer.setID(getMaxId() + 1);
+        listCustomer.add(customer);
+        return customer;
+    }
+    public void searchCustomersExel() {
+        System.out.println("tất cả các khách hàng hiện có trong hệ thống : ");
+        if (listCustomer != null) {
+            for (Customer customer : listCustomer) {
+                System.out.println("\n" + customer.toString());
+            }
+        }
+    }
+    public void luuDanhSachKhachHang(String filePath) {
+        List<String[]> data = new ArrayList<>();
+        // Add room data to the list
+        for (Customer customer : listCustomer) {
+            data.add(new String[]{
+                    String.valueOf(customer.getID()),
+                    customer.getTen(),
+                    customer.getNamSinh(),
+                    customer.getCCCD(),
+                    String.valueOf(customer.getSoNguoi())
+            });
+        }
+        String[] headers = {"ID Khách Hàng", "Tên Khách Hàng", "Năm Sinh", "Số CCCD", "Số Người"};
+        exportToExcel(data, headers,filePath);
+        System.out.println("Danh sách khách hàng đã được lưu vào file: " + filePath);
+    }
+    private static Long getMaxId() {
+        if (listCustomer == null) {
+            return 0L;
+        }
+        Long maxId = 0L;
+        for (Customer customer : listCustomer) {
+            if (customer != null && customer.getID() > maxId) {
+                maxId = customer.getID();
+            }
+        }
+        return maxId;
+    }
 }
