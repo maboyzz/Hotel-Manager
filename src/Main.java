@@ -2,6 +2,7 @@ import Service.ServiceCustomer;
 import Service.ServiceDatPhong;
 import Service.ServiceRoom;
 
+import java.io.File;
 import java.util.Scanner;
 
 public class Main {
@@ -11,10 +12,31 @@ public class Main {
         ServiceDatPhong serviceDatPhong = new ServiceDatPhong();
 
         Scanner sc = new Scanner(System.in);
-        String filePathPhong = "phongOutput.xlsx";
-        String filePathKhachHang = "khachHangOutput.xlsx";
-        String filePathDatPhong = "datPhongOutput.xlsx";
 
+        String folderPath = "dulieu"; // hoặc tuyệt đối như "C:/Users/TenUser/Desktop/dulieu"
+        File folder = new File(folderPath);
+
+        // Tạo thư mục nếu chưa có
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        String filePathPhong = folderPath + File.separator + "phongOutput.xlsx";
+        String filePathKhachHang = folderPath + File.separator + "khachHangOutput.xlsx";
+        String filePathDatPhong = folderPath + File.separator + "datPhongOutput.xlsx";
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            servicePhong.luuDanhSachPhong(filePathPhong);
+            serviceCustomer.luuDanhSachKhachHang(filePathKhachHang);
+            serviceDatPhong.luuDanhSachDatPhong(filePathDatPhong);
+        }));
+        if (new File(filePathDatPhong).exists()) {
+            serviceDatPhong.docDanhSachDatPhongTuFileExcel(filePathDatPhong);
+        }
+        if (new File(filePathPhong).exists()) {
+            servicePhong.docDanhSachPhongTuFileExcel(filePathPhong);
+        }
+        if (new File(filePathKhachHang).exists()) {
+            serviceCustomer.docDanhSachKhachHangTuFileExcel(filePathKhachHang);
+        }
         boolean isExit = false;
 
         // Tự động lưu file Excel khi thoát chương trình
@@ -31,12 +53,7 @@ public class Main {
                     break;
                 case "2":
                     handleExelMenu(serviceDatPhong, serviceCustomer, servicePhong, sc);
-                    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-                        servicePhong.luuDanhSachPhong(filePathPhong);
-                        serviceCustomer.luuDanhSachKhachHang(filePathKhachHang);
-                        serviceDatPhong.luuDanhSachDatPhong(filePathDatPhong);
-                        System.out.println("Danh sách phòng đã được lưu vào " + filePathPhong);
-                    }));
+
                     break;
                 case "3":
                     isExit = true;
@@ -87,6 +104,7 @@ public class Main {
             }
         }
     }
+
     private static void handleExelMenu(ServiceDatPhong serviceDatPhong, ServiceCustomer serviceCustomer, ServiceRoom servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
@@ -157,6 +175,7 @@ public class Main {
             }
         }
     }
+
     private static void handleRoomMenuExel(ServiceRoom servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
@@ -218,6 +237,7 @@ public class Main {
             }
         }
     }
+
     private static void handleCustomerMenuExel(ServiceCustomer serviceCustomer, Scanner sc) {
         boolean back = false;
         while (!back) {
@@ -272,6 +292,7 @@ public class Main {
             }
         }
     }
+
     private static void handleBookingMenuExel(ServiceDatPhong serviceDatPhong, Scanner sc) {
         boolean back = false;
         while (!back) {

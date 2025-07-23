@@ -1,12 +1,15 @@
 package Service;
 
 import DAO.RoomDAO;
-import Model.Customer;
+
 import Model.Room;
 import constant.LoaiPhong;
 import constant.TinhTrang;
-import constant.TrangThai;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -212,9 +215,9 @@ public class ServiceRoom {
             data.add(new String[]{
                     String.valueOf(room.getID()),
                     room.getTenPhong(),
-                    room.getLoaiPhong() != null ? room.getLoaiPhong().getDescription() : "",
+                    String.valueOf(room.getLoaiPhong()),
                     room.getKichThuoc(),
-                    room.getTrangThai() != null ? room.getTrangThai().getDescription() : "",
+                    String.valueOf(room.getTrangThai()),
                     room.getTinhNang(),
                     String.valueOf(room.getGiaPhong())
             });
@@ -254,4 +257,53 @@ public class ServiceRoom {
         }
         return gia;
     }
+    public void docDanhSachPhongTuFileExcel(String filePath) {
+        try (FileInputStream fis = new FileInputStream(filePath);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0); // Sheet đầu tiên
+            listRoom.clear(); // Xóa dữ liệu cũ trước khi load
+
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) { // Bỏ qua dòng tiêu đề (i = 1)
+                Row row = sheet.getRow(i);
+                if (row == null) continue;
+
+                Room room = new Room();
+                room.setID(getLongValue(row.getCell(0)));
+                room.setTenPhong(row.getCell(1).getStringCellValue());
+                String loaiPhongStr = row.getCell(2).getStringCellValue();
+                room.setLoaiPhong(LoaiPhong.valueOf(loaiPhongStr));
+                String trangThaiStr = row.getCell(4).getStringCellValue();
+                room.setTrangThai(TinhTrang.valueOf(trangThaiStr));
+                room.setKichThuoc(row.getCell(3).getStringCellValue());
+                room.setTinhNang(row.getCell(5).getStringCellValue());
+
+                listRoom.add(room);
+            }
+            System.out.println("P Đã import danh sách đặt phòng từ file Excel.");
+        } catch (IOException e) {
+            System.out.println("P Lỗi đọc file Excel: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("P Lỗi định dạng dữ liệu trong file Excel: " + e.getMessage());
+        }
+    }
+    private Long getLongValue(Cell cell) {
+        if (cell == null) return null;
+        if (cell.getCellType() == CellType.NUMERIC) {
+            return (long) cell.getNumericCellValue();
+        } else if (cell.getCellType() == CellType.STRING) {
+            return Long.parseLong(cell.getStringCellValue());
+        }
+        return null;
+    }
+    private Integer getIntValue(Cell cell) {
+        if (cell == null) return null;
+        if (cell.getCellType() == CellType.NUMERIC) {
+            return (int) cell.getNumericCellValue();
+        } else if (cell.getCellType() == CellType.STRING) {
+            return Integer.parseInt(cell.getStringCellValue());
+        }
+        return null;
+    }
+
 }

@@ -2,6 +2,11 @@ package Service;
 
 import DAO.CustomerDAO;
 import Model.Customer;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +122,35 @@ public class ServiceCustomer {
         exportToExcel(data, headers,filePath);
         System.out.println("Danh sách khách hàng đã được lưu vào file: " + filePath);
     }
+    public void docDanhSachKhachHangTuFileExcel(String filePath) {
+        try (FileInputStream fis = new FileInputStream(filePath);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0); // Sheet đầu tiên
+            listCustomer.clear(); // Xóa dữ liệu cũ trước khi load
+
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) { // Bỏ qua dòng tiêu đề (i = 1)
+                Row row = sheet.getRow(i);
+                if (row == null) continue;
+
+                Customer customer = new Customer();
+                customer.setID(getLongValue(row.getCell(0)));
+                customer.setTen(row.getCell(1).getStringCellValue());
+                customer.setNamSinh(row.getCell(2).getStringCellValue());
+                customer.setCCCD(row.getCell(3).getStringCellValue());
+                customer.setSoNguoi(getIntValue(row.getCell(4)));
+                listCustomer.add(customer);
+
+            }
+
+            System.out.println("KH Đã import danh sách đặt phòng từ file Excel.");
+        } catch (IOException e) {
+            System.out.println("KH Lỗi đọc file Excel: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println(" KH Lỗi định dạng dữ liệu trong file Excel: " + e.getMessage());
+        }
+    }
+
     private static Long getMaxId() {
         if (listCustomer == null) {
             return 0L;
@@ -128,5 +162,23 @@ public class ServiceCustomer {
             }
         }
         return maxId;
+    }
+    private Long getLongValue(Cell cell) {
+        if (cell == null) return null;
+        if (cell.getCellType() == CellType.NUMERIC) {
+            return (long) cell.getNumericCellValue();
+        } else if (cell.getCellType() == CellType.STRING) {
+            return Long.parseLong(cell.getStringCellValue());
+        }
+        return null;
+    }
+    private Integer getIntValue(Cell cell) {
+        if (cell == null) return null;
+        if (cell.getCellType() == CellType.NUMERIC) {
+            return (int) cell.getNumericCellValue();
+        } else if (cell.getCellType() == CellType.STRING) {
+            return Integer.parseInt(cell.getStringCellValue());
+        }
+        return null;
     }
 }
