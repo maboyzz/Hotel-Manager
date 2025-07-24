@@ -240,7 +240,23 @@ public class ServiceRoom {
             System.out.println("Khong tim thay phong trong");
         }
     }
-
+    public Room timKiemPhongTheoIDExel() {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Nhập Id phòng :");
+        long idPhong = sc.nextLong();
+        for (Room room : listRoom) {
+            if (room.getID() == idPhong) {
+                return room;
+            }
+        }
+        return null;
+    }
+public void xoaPhongTheoIDExel(){
+        Room room = timKiemPhongTheoIDExel();
+        if(room != null){
+            listRoom.remove(room);
+        }
+}
 
     private long tinhgiaphong(LoaiPhong loaiPhong) {
         long gia = 0L;

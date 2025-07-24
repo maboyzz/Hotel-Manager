@@ -201,7 +201,7 @@ public class Main {
                     break;
                 case "4":
                     servicePhong.searchRoomsExel();
-                    System.out.println("đang trieern khai");
+                    servicePhong.xoaPhongTheoIDExel();
                     break;
                 case "5":
                     servicePhong.searchRoomsExel();

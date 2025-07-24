@@ -129,7 +129,7 @@ public class ServiceDatPhong {
         long soNgay = Duration.between(dp.getThoiGianDat(), dp.getThoiGianTra()).toDays();
         if (soNgay <= 0) soNgay = 1;
 
-        Long giaTien = room.getGiaPhong() * soNgay;
+        long giaTien = room.getGiaPhong() * soNgay;
 
         new RoomDAO().capNhatTrangThai(room.getID(), TinhTrang.PHONG_TRONG);
         new DatPhongDAO().capNhatTrangThai(dp.getId(), TrangThai.DA_THANH_TOAN);
@@ -283,7 +283,7 @@ public class ServiceDatPhong {
         long soNgay = Duration.between(datPhong.getThoiGianDat(), datPhong.getThoiGianTra()).toDays();
         if (soNgay <= 0) soNgay = 1;
 
-        Long giaTien = room.getGiaPhong() * soNgay;
+        long giaTien = room.getGiaPhong() * soNgay;
 
         room.setTrangThai(TinhTrang.PHONG_TRONG);
         datPhong.setTrangThai(TrangThai.DA_THANH_TOAN);
