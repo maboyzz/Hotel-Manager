@@ -21,6 +21,7 @@ public class CustomerDAO {
 
             if (rs.next()) {
                 // CCCD đã tồn tại → trả về ID có sẵn
+                System.out.println("Khách hàng đã tồn tại, sử dụng lại ID: " + rs.getLong("id"));
                 return rs.getLong("id");
             }
 
@@ -59,7 +60,7 @@ public class CustomerDAO {
         }
     }
 
-    public List<Customer> TimTatCaKhachHang() {
+    public List<Customer> findAllCustomers() {
         List<Customer> customers = new ArrayList<>();
         String sql = "SELECT * FROM khach_hang";
 
@@ -83,7 +84,7 @@ public class CustomerDAO {
 
         return customers;
     }
-    public Customer selectCustomerById(Long id) {
+    public Customer findCustomerById(Long id) {
         String sql = "SELECT * FROM khach_hang WHERE id = ?";
         Customer customer = null;
         try (Connection conn = DAOConnection.getConnection();

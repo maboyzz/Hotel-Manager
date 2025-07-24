@@ -15,15 +15,15 @@ import java.util.Scanner;
 import static DAO.ExportToExcel.exportToExcel;
 import static Validator.CustomerValidator.*;
 
-public class ServiceCustomer {
-    static ArrayList<Customer> listCustomer = new ArrayList<Customer>();
+public class CustomerService {
+    static ArrayList<Customer> customerList = new ArrayList<Customer>();
 
     private static boolean isInputBlank(String input) {
         return input == null || input.trim().isEmpty();
     }
 
     private boolean checkInput() {
-        if (listCustomer == null || listCustomer.isEmpty()) {
+        if (customerList == null || customerList.isEmpty()) {
             System.out.println("Error: No matching data.");
             return false;
         }
@@ -80,9 +80,9 @@ public class ServiceCustomer {
         new CustomerDAO().insertCustomer(customer);
         return customer;
     }
-    public void searchCustomerSQL() {
+    public void findAllCustomersSQL() {
 
-        List<Customer> customers = new CustomerDAO().TimTatCaKhachHang();
+        List<Customer> customers = new CustomerDAO().findAllCustomers();
         if (customers.isEmpty()) {
             System.out.println("Không có khách hàng nào");
         } else {
@@ -91,25 +91,25 @@ public class ServiceCustomer {
             }
         }
     }
-    public static Customer addCustomerExel(){
+    public static Customer addCustomerExcel(){
         System.out.println("Enter room information : ");
         Customer customer = inputCustomerInfo();
         customer.setID(getMaxId() + 1);
-        listCustomer.add(customer);
+        customerList.add(customer);
         return customer;
     }
-    public void searchCustomersExel() {
+    public void findAllCustomersExcel() {
         System.out.println("tất cả các khách hàng hiện có trong hệ thống : ");
-        if (listCustomer != null) {
-            for (Customer customer : listCustomer) {
+        if (customerList != null) {
+            for (Customer customer : customerList) {
                 System.out.println("\n" + customer.toString());
             }
         }
     }
-    public void luuDanhSachKhachHang(String filePath) {
+    public void saveCustomerListToExcel(String filePath) {
         List<String[]> data = new ArrayList<>();
         // Add room data to the list
-        for (Customer customer : listCustomer) {
+        for (Customer customer : customerList) {
             data.add(new String[]{
                     String.valueOf(customer.getID()),
                     customer.getTen(),
@@ -122,12 +122,12 @@ public class ServiceCustomer {
         exportToExcel(data, headers,filePath);
         System.out.println("Danh sách khách hàng đã được lưu vào file: " + filePath);
     }
-    public void docDanhSachKhachHangTuFileExcel(String filePath) {
+    public void loadCustomerListFromExcel(String filePath) {
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(0); // Sheet đầu tiên
-            listCustomer.clear(); // Xóa dữ liệu cũ trước khi load
+            customerList.clear(); // Xóa dữ liệu cũ trước khi load
 
             for (int i = 1; i <= sheet.getLastRowNum(); i++) { // Bỏ qua dòng tiêu đề (i = 1)
                 Row row = sheet.getRow(i);
@@ -139,7 +139,7 @@ public class ServiceCustomer {
                 customer.setNamSinh(row.getCell(2).getStringCellValue());
                 customer.setCCCD(row.getCell(3).getStringCellValue());
                 customer.setSoNguoi(getIntValue(row.getCell(4)));
-                listCustomer.add(customer);
+                customerList.add(customer);
 
             }
 
@@ -152,11 +152,11 @@ public class ServiceCustomer {
     }
 
     private static Long getMaxId() {
-        if (listCustomer == null) {
+        if (customerList == null) {
             return 0L;
         }
         Long maxId = 0L;
-        for (Customer customer : listCustomer) {
+        for (Customer customer : customerList) {
             if (customer != null && customer.getID() > maxId) {
                 maxId = customer.getID();
             }

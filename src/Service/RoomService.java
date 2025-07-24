@@ -18,17 +18,17 @@ import static DAO.ExportToExcel.exportToExcel;
 import static Validator.RoomValidator.*;
 
 
-public class ServiceRoom {
+public class RoomService {
 
 
-    static ArrayList<Room> listRoom = new ArrayList<Room>();
+    static ArrayList<Room> roomList = new ArrayList<Room>();
 
     private boolean isInputBlank(String input) {
         return input == null || input.trim().isEmpty();
     }
 
     private boolean checkInput() {
-        if (listRoom == null || listRoom.isEmpty()) {
+        if (roomList == null || roomList.isEmpty()) {
             System.out.println("Error: No matching data.");
             return false;
         }
@@ -109,11 +109,11 @@ public class ServiceRoom {
     }
 
     private Long getMaxId() {
-        if (listRoom == null) {
+        if (roomList == null) {
             return 0L;
         }
         Long maxId = 0L;
-        for (Room room : listRoom) {
+        for (Room room : roomList) {
             if (room != null && room.getID() > maxId) {
                 maxId = room.getID();
             }
@@ -123,17 +123,17 @@ public class ServiceRoom {
 
     Long ID = 0L;
 
-    public void addRoomsSQL() {
+    public void addRoomSQL() {
         System.out.println("Enter room information : ");
         Room room = inputRoomInfo();
-        room.setGiaPhong(tinhgiaphong(room.getLoaiPhong()));
+        room.setGiaPhong(calculateRoomPrice(room.getLoaiPhong()));
         new RoomDAO().insertRoom(room);
         System.out.println("Room added to database: " + room);
     }
 
-    public void timPhongtrongSQL() {
+    public void findAvailableRoomsSQL() {
 
-        List<Room> rooms = new RoomDAO().TimPhongTrong();
+        List<Room> rooms = new RoomDAO().findAvailableRooms();
         if (rooms.isEmpty()) {
             System.out.println("No rooms found.");
         } else {
@@ -143,10 +143,10 @@ public class ServiceRoom {
         }
     }
 
-    public void timToanBoPhongSQL() {
+    public void findAllRoomsSQL() {
 
 
-        List<Room> rooms = new RoomDAO().TimTatCaPhong();
+        List<Room> rooms = new RoomDAO().findAllRooms();
         if (rooms.isEmpty()) {
             System.out.println("No rooms found.");
         } else {
@@ -156,7 +156,7 @@ public class ServiceRoom {
         }
     }
 
-    public void capNhatPhongSQL() {
+    public void updateRoomSQL() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Nhập mã Phòng :");
         String idPhong = sc.nextLine();
@@ -166,8 +166,8 @@ public class ServiceRoom {
             if (room != null) {
                 Room roomUpdate = inputRoomInfo();
                 roomUpdate.setID(room.getID());
-                roomUpdate.setGiaPhong(tinhgiaphong(roomUpdate.getLoaiPhong()));
-                new RoomDAO().capNhatPhong(roomUpdate);
+                roomUpdate.setGiaPhong(calculateRoomPrice(roomUpdate.getLoaiPhong()));
+                new RoomDAO().updateRoom(roomUpdate);
             } else {
                 System.out.println("Không tìm thấy phòng !!!");
             }
@@ -175,7 +175,7 @@ public class ServiceRoom {
 
 
     }
-    public void xoaPhongSQL() {
+    public void deleteRoomSQL() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Nhập mã Phòng :");
         String idPhong = sc.nextLine();
@@ -183,35 +183,35 @@ public class ServiceRoom {
         if (!isInputBlank(idPhong) && isValidIDPhong(idPhong)) {
             Room room = new RoomDAO().findRoomById(Long.parseLong(idPhong));
             if (room != null) {
-                new RoomDAO().xoaPhong(Long.parseLong(idPhong));
+                new RoomDAO().deleteRoom(Long.parseLong(idPhong));
             } else {
                 System.out.println("Không tìm thấy phòng !!!");
             }
         }
     }
 
-    public void addRoomsExel() {
+    public void addRoomExcel() {
         System.out.println("Enter room information : ");
         Room room = inputRoomInfo();
         room.setID(getMaxId() + 1);
-        room.setGiaPhong(tinhgiaphong(room.getLoaiPhong()));
-        listRoom.add(room);
+        room.setGiaPhong(calculateRoomPrice(room.getLoaiPhong()));
+        roomList.add(room);
         System.out.println("Room added to" + room);
     }
 
-    public void searchRoomsExel() {
+    public void findAllRoomsExcel() {
         System.out.println("tất cả các phòng hiện có trong hệ thống : ");
-        if (listRoom != null) {
-            for (Room room : listRoom) {
+        if (roomList != null) {
+            for (Room room : roomList) {
                 System.out.println("\n" + room.toString());
             }
         }
     }
 
-    public void luuDanhSachPhong(String filePath) {
+    public void saveRoomListToExcel(String filePath) {
         List<String[]> data = new ArrayList<>();
         // Add room data to the list
-        for (Room room : listRoom) {
+        for (Room room : roomList) {
             data.add(new String[]{
                     String.valueOf(room.getID()),
                     room.getTenPhong(),
@@ -227,10 +227,10 @@ public class ServiceRoom {
         System.out.println("Danh sách phòng đã được lưu vào file: " + filePath);
     }
 
-    public void timKiemPhongTrongExel() {
+    public void findAvailableRoomsExcel() {
         Scanner sc = new Scanner(System.in);
         boolean found = false;
-        for (Room room : listRoom) {
+        for (Room room : roomList) {
             if (room.getTrangThai().getDescription().equalsIgnoreCase("phòng trống")) {
                 System.out.println("Phong trong: " + room);
                 found = true;
@@ -240,25 +240,30 @@ public class ServiceRoom {
             System.out.println("Khong tim thay phong trong");
         }
     }
-    public Room timKiemPhongTheoIDExel() {
+    public Room findRoomByIdExcel() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Nhập Id phòng :");
         long idPhong = sc.nextLong();
-        for (Room room : listRoom) {
+        for (Room room : roomList) {
             if (room.getID() == idPhong) {
                 return room;
             }
         }
         return null;
     }
-public void xoaPhongTheoIDExel(){
-        Room room = timKiemPhongTheoIDExel();
+public void deleteRoomByIdExcel(){
+        Room room = findRoomByIdExcel();
         if(room != null){
-            listRoom.remove(room);
+            if(room.getTrangThai().equals(TinhTrang.DA_THUE)){
+                System.out.println("phòng đang thuê không thể xóa");
+                return;
+            }
+            roomList.remove(room);
+            System.out.println("Xóa phòng thành công");
         }
 }
 
-    private long tinhgiaphong(LoaiPhong loaiPhong) {
+    private long calculateRoomPrice(LoaiPhong loaiPhong) {
         long gia = 0L;
         if (loaiPhong != null) {
             if (loaiPhong.getDescription().equalsIgnoreCase("phòng đơn")) {
@@ -273,12 +278,12 @@ public void xoaPhongTheoIDExel(){
         }
         return gia;
     }
-    public void docDanhSachPhongTuFileExcel(String filePath) {
+    public void loadRoomListFromExcel(String filePath) {
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = new XSSFWorkbook(fis)) {
 
             Sheet sheet = workbook.getSheetAt(0); // Sheet đầu tiên
-            listRoom.clear(); // Xóa dữ liệu cũ trước khi load
+            roomList.clear(); // Xóa dữ liệu cũ trước khi load
 
             for (int i = 1; i <= sheet.getLastRowNum(); i++) { // Bỏ qua dòng tiêu đề (i = 1)
                 Row row = sheet.getRow(i);
@@ -293,8 +298,9 @@ public void xoaPhongTheoIDExel(){
                 room.setTrangThai(TinhTrang.valueOf(trangThaiStr));
                 room.setKichThuoc(row.getCell(3).getStringCellValue());
                 room.setTinhNang(row.getCell(5).getStringCellValue());
+                room.setGiaPhong(getLongValue(row.getCell(6)));
 
-                listRoom.add(room);
+                roomList.add(room);
             }
             System.out.println("P Đã import danh sách đặt phòng từ file Excel.");
         } catch (IOException e) {
@@ -312,14 +318,4 @@ public void xoaPhongTheoIDExel(){
         }
         return null;
     }
-    private Integer getIntValue(Cell cell) {
-        if (cell == null) return null;
-        if (cell.getCellType() == CellType.NUMERIC) {
-            return (int) cell.getNumericCellValue();
-        } else if (cell.getCellType() == CellType.STRING) {
-            return Integer.parseInt(cell.getStringCellValue());
-        }
-        return null;
-    }
-
 }

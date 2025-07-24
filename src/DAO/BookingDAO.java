@@ -1,16 +1,13 @@
 package DAO;
 import Model.DatPhong;
-import Model.Room;
-import constant.LoaiPhong;
-import constant.TinhTrang;
 import constant.TrangThai;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatPhongDAO {
-    public void datPhong(DatPhong dp) {
+public class BookingDAO {
+    public void insertBooking(DatPhong dp) {
         String sql = "INSERT INTO dat_phong ( khach_hang_id, phong_id, ngay_nhan, ngay_tra, ghi_chu,trang_thai) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DAOConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -25,7 +22,7 @@ public class DatPhongDAO {
             e.printStackTrace();
         }
     }
-    public DatPhong timDatPhongBangID(Long id) {
+    public DatPhong findBookingById(Long id) {
         String sql = "SELECT * FROM dat_phong WHERE id = ?";
         try (Connection conn = DAOConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -51,7 +48,7 @@ public class DatPhongDAO {
 
         return null;
     }
-    public List<DatPhong> timTatCaHoaDon() {
+    public List<DatPhong> findAllBookings() {
         List<DatPhong> hoadons = new ArrayList<>();
 
         String sql = "SELECT * FROM dat_phong";
@@ -74,7 +71,7 @@ public class DatPhongDAO {
         }
         return hoadons;
     }
-    public List<DatPhong> timTatCaHoaDonChuaThanhToan() {
+    public List<DatPhong> findUnpaidBookings() {
         List<DatPhong> hoadons = new ArrayList<>();
 
         String sql = "SELECT * FROM dat_phong where trang_thai = 'CHUA_THANH_TOAN'";
@@ -97,7 +94,7 @@ public class DatPhongDAO {
         }
         return hoadons;
     }
-    public void capNhatTrangThai(Long dpId, TrangThai trangThaiMoi) {
+    public void updateBookingStatus(Long dpId, TrangThai trangThaiMoi) {
         String sql = "UPDATE dat_phong SET trang_thai = ? WHERE id = ?";
 
         try (Connection conn = DAOConnection.getConnection();

@@ -1,22 +1,22 @@
-import Service.ServiceCustomer;
-import Service.ServiceDatPhong;
-import Service.ServiceRoom;
+import Service.CustomerService;
+import Service.BookingService;
+import Service.RoomService;
 
 import java.io.File;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        ServiceRoom servicePhong = new ServiceRoom();
-        ServiceCustomer serviceCustomer = new ServiceCustomer();
-        ServiceDatPhong serviceDatPhong = new ServiceDatPhong();
+        RoomService servicePhong = new RoomService();
+        CustomerService customerService = new CustomerService();
+        BookingService bookingService = new BookingService();
 
         Scanner sc = new Scanner(System.in);
 
-        String folderPath = "dulieu"; // hoặc tuyệt đối như "C:/Users/TenUser/Desktop/dulieu"
+        String folderPath = "dulieu";
         File folder = new File(folderPath);
 
-        // Tạo thư mục nếu chưa có
+
         if (!folder.exists()) {
             folder.mkdirs();
         }
@@ -24,18 +24,18 @@ public class Main {
         String filePathKhachHang = folderPath + File.separator + "khachHangOutput.xlsx";
         String filePathDatPhong = folderPath + File.separator + "datPhongOutput.xlsx";
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            servicePhong.luuDanhSachPhong(filePathPhong);
-            serviceCustomer.luuDanhSachKhachHang(filePathKhachHang);
-            serviceDatPhong.luuDanhSachDatPhong(filePathDatPhong);
+            servicePhong.saveRoomListToExcel(filePathPhong);
+            customerService.saveCustomerListToExcel(filePathKhachHang);
+            bookingService.saveBookingListToExcel(filePathDatPhong);
         }));
         if (new File(filePathDatPhong).exists()) {
-            serviceDatPhong.docDanhSachDatPhongTuFileExcel(filePathDatPhong);
+            bookingService.loadBookingListFromExcel(filePathDatPhong);
         }
         if (new File(filePathPhong).exists()) {
-            servicePhong.docDanhSachPhongTuFileExcel(filePathPhong);
+            servicePhong.loadRoomListFromExcel(filePathPhong);
         }
         if (new File(filePathKhachHang).exists()) {
-            serviceCustomer.docDanhSachKhachHangTuFileExcel(filePathKhachHang);
+            customerService.loadCustomerListFromExcel(filePathKhachHang);
         }
         boolean isExit = false;
 
@@ -49,10 +49,10 @@ public class Main {
 
             switch (choice) {
                 case "1":
-                    handleSQLMenu(serviceDatPhong, serviceCustomer, servicePhong, sc);
+                    handleSQLMenu(bookingService, customerService, servicePhong, sc);
                     break;
                 case "2":
-                    handleExelMenu(serviceDatPhong, serviceCustomer, servicePhong, sc);
+                    handleExelMenu(bookingService, customerService, servicePhong, sc);
 
                     break;
                 case "3":
@@ -74,7 +74,7 @@ public class Main {
         System.out.println("3. Thoát");
     }
 
-    private static void handleSQLMenu(ServiceDatPhong serviceDatPhong, ServiceCustomer serviceCustomer, ServiceRoom servicePhong, Scanner sc) {
+    private static void handleSQLMenu(BookingService bookingService, CustomerService customerService, RoomService servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
             System.out.println("\n=== Quản lý SQL ===");
@@ -90,10 +90,10 @@ public class Main {
                     handleRoomMenuSQL(servicePhong, sc);
                     break;
                 case "2":
-                    handleCustomerMenuSQL(serviceCustomer, sc);
+                    handleCustomerMenuSQL(customerService, sc);
                     break;
                 case "3":
-                    handleBookingMenuSQL(serviceDatPhong, sc);
+                    handleBookingMenuSQL(bookingService, sc);
                     break;
                 case "4":
                     back = true;
@@ -105,7 +105,7 @@ public class Main {
         }
     }
 
-    private static void handleExelMenu(ServiceDatPhong serviceDatPhong, ServiceCustomer serviceCustomer, ServiceRoom servicePhong, Scanner sc) {
+    private static void handleExelMenu(BookingService bookingService, CustomerService customerService, RoomService servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
             System.out.println("\n=== Quản lý SQL ===");
@@ -121,10 +121,10 @@ public class Main {
                     handleRoomMenuExel(servicePhong, sc);
                     break;
                 case "2":
-                    handleCustomerMenuExel(serviceCustomer, sc);
+                    handleCustomerMenuExel(customerService, sc);
                     break;
                 case "3":
-                    handleBookingMenuExel(serviceDatPhong, sc);
+                    handleBookingMenuExel(bookingService, sc);
                     break;
                 case "4":
                     back = true;
@@ -136,7 +136,7 @@ public class Main {
         }
     }
 
-    private static void handleRoomMenuSQL(ServiceRoom servicePhong, Scanner sc) {
+    private static void handleRoomMenuSQL(RoomService servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
             System.out.println("\n--- Quản lý Phòng ---");
@@ -151,21 +151,21 @@ public class Main {
             String choice = sc.nextLine().trim();
             switch (choice) {
                 case "1":
-                    servicePhong.timPhongtrongSQL();
+                    servicePhong.findAvailableRoomsSQL();
                     break;
                 case "2":
-                    servicePhong.timToanBoPhongSQL();
+                    servicePhong.findAllRoomsSQL();
                     break;
                 case "3":
-                    servicePhong.addRoomsSQL();
+                    servicePhong.addRoomSQL();
                     break;
                 case "4":
-                    servicePhong.timToanBoPhongSQL();
-                    servicePhong.capNhatPhongSQL();
+                    servicePhong.findAllRoomsSQL();
+                    servicePhong.updateRoomSQL();
                     break;
                 case "5":
-                    servicePhong.timToanBoPhongSQL();
-                    servicePhong.xoaPhongSQL();
+                    servicePhong.findAllRoomsSQL();
+                    servicePhong.deleteRoomSQL();
                     break;
                 case "6":
                     back = true;
@@ -176,7 +176,7 @@ public class Main {
         }
     }
 
-    private static void handleRoomMenuExel(ServiceRoom servicePhong, Scanner sc) {
+    private static void handleRoomMenuExel(RoomService servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
             System.out.println("\n--- Quản lý Phòng ---");
@@ -191,21 +191,21 @@ public class Main {
             String choice = sc.nextLine().trim();
             switch (choice) {
                 case "1":
-                    servicePhong.timKiemPhongTrongExel();
+                    servicePhong.findAvailableRoomsExcel();
                     break;
                 case "2":
-                    servicePhong.searchRoomsExel();
+                    servicePhong.findAllRoomsExcel();
                     break;
                 case "3":
-                    servicePhong.addRoomsExel();
+                    servicePhong.addRoomExcel();
                     break;
                 case "4":
-                    servicePhong.searchRoomsExel();
-                    servicePhong.xoaPhongTheoIDExel();
+                    servicePhong.findAllRoomsExcel();
                     break;
                 case "5":
-                    servicePhong.searchRoomsExel();
-                    System.out.println("đang trieern khai");
+                    servicePhong.findAllRoomsExcel();
+                    servicePhong.deleteRoomByIdExcel();
+
                     break;
                 case "6":
                     back = true;
@@ -216,7 +216,7 @@ public class Main {
         }
     }
 
-    private static void handleCustomerMenuSQL(ServiceCustomer serviceCustomer, Scanner sc) {
+    private static void handleCustomerMenuSQL(CustomerService customerService, Scanner sc) {
         boolean back = false;
         while (!back) {
             System.out.println("\n--- Quản lý Khách hàng ---");
@@ -227,7 +227,7 @@ public class Main {
             String choice = sc.nextLine().trim();
             switch (choice) {
                 case "1":
-                    serviceCustomer.searchCustomerSQL();
+                    customerService.findAllCustomersSQL();
                     break;
                 case "2":
                     back = true;
@@ -238,7 +238,7 @@ public class Main {
         }
     }
 
-    private static void handleCustomerMenuExel(ServiceCustomer serviceCustomer, Scanner sc) {
+    private static void handleCustomerMenuExel(CustomerService customerService, Scanner sc) {
         boolean back = false;
         while (!back) {
             System.out.println("\n--- Quản lý Khách hàng ---");
@@ -249,7 +249,7 @@ public class Main {
             String choice = sc.nextLine().trim();
             switch (choice) {
                 case "1":
-                    serviceCustomer.searchCustomersExel();
+                    customerService.findAllCustomersExcel();
                     break;
                 case "2":
                     back = true;
@@ -261,7 +261,7 @@ public class Main {
     }
 
 
-    private static void handleBookingMenuSQL(ServiceDatPhong serviceDatPhong, Scanner sc) {
+    private static void handleBookingMenuSQL(BookingService bookingService, Scanner sc) {
         boolean back = false;
         while (!back) {
             System.out.println("\n--- Quản lý Đặt phòng & Thanh toán ---");
@@ -274,14 +274,14 @@ public class Main {
             String choice = sc.nextLine().trim();
             switch (choice) {
                 case "1":
-                    serviceDatPhong.taoKhachVaDatPhongSQL();
+                    bookingService.createCustomerAndBookingSQL();
                     break;
                 case "2":
-                    serviceDatPhong.hienThiTatCaHoaDonSQL();
+                    bookingService.showAllInvoicesSQL();
                     break;
                 case "3":
-                    serviceDatPhong.hienThiTatCaHoaDonChuaThanhToanSQL();
-                    serviceDatPhong.traPhongVaThanhToanSQL();
+                    bookingService.showUnpaidInvoicesSQL();
+                    bookingService.checkoutAndPaymentSQL();
 
                     break;
                 case "4":
@@ -293,7 +293,7 @@ public class Main {
         }
     }
 
-    private static void handleBookingMenuExel(ServiceDatPhong serviceDatPhong, Scanner sc) {
+    private static void handleBookingMenuExel(BookingService bookingService, Scanner sc) {
         boolean back = false;
         while (!back) {
             System.out.println("\n--- Quản lý Đặt phòng & Thanh toán ---");
@@ -306,14 +306,14 @@ public class Main {
             String choice = sc.nextLine().trim();
             switch (choice) {
                 case "1":
-                    serviceDatPhong.taoKhachVaDatPhongExel();
+                    bookingService.createCustomerAndBookingExcel();
                     break;
                 case "2":
-                    serviceDatPhong.hienThiTatCaHoaDonExel();
+                    bookingService.showAllInvoicesExcel();
                     break;
                 case "3":
-                    serviceDatPhong.hienThiTatCaHoaDonChuaThanhToanExel();
-                    serviceDatPhong.traPhongVaThanhToanExel();
+                    bookingService.showUnpaidInvoicesExcel();
+                    bookingService.checkoutAndPaymentExcel();
                     break;
                 case "4":
                     back = true;

@@ -29,7 +29,7 @@ public class RoomDAO {
         }
     }
 
-    public List<Room> TimTatCaPhong() {
+    public List<Room> findAllRooms() {
         List<Room> rooms = new ArrayList<>();
         String sql = "SELECT * FROM phong";
         try (Connection conn = DAOConnection.getConnection();
@@ -52,7 +52,7 @@ public class RoomDAO {
         return rooms;
     }
 
-    public List<Room> TimPhongTrong() {
+    public List<Room> findAvailableRooms() {
         List<Room> rooms = new ArrayList<>();
         String sql = "SELECT * FROM phong WHERE trang_thai = 'PHONG_TRONG'";
         try (Connection conn = DAOConnection.getConnection();
@@ -99,7 +99,7 @@ public class RoomDAO {
         return null;
     }
 
-    public void capNhatTrangThai(Long phongId, TinhTrang trangThaiMoi) {
+    public void updateRoomStatus(Long phongId, TinhTrang trangThaiMoi) {
         String sql = "UPDATE phong SET trang_thai = ? WHERE ma_phong = ?";
 
         try (Connection conn = DAOConnection.getConnection();
@@ -120,7 +120,7 @@ public class RoomDAO {
             e.printStackTrace();
         }
     }
-    public void capNhatPhong(Room room) {
+    public void updateRoom(Room room) {
         String sql = "UPDATE phong SET ten_phong = ?, loai_phong = ?, gia_phong = ?, trang_thai = ?, kich_thuoc = ?, tinh_nang = ? WHERE ma_phong = ?";
 
         try (Connection conn = DAOConnection.getConnection();
@@ -148,7 +148,7 @@ public class RoomDAO {
             e.printStackTrace();
         }
     }
-    public void xoaPhong(Long phongId) {
+    public void deleteRoom(Long phongId) {
         String sql = "DELETE FROM phong WHERE ma_phong = ?";
 
         try (Connection conn = DAOConnection.getConnection();
