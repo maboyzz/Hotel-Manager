@@ -262,6 +262,26 @@ public void deleteRoomByIdExcel(){
             System.out.println("Xóa phòng thành công");
         }
 }
+    public void updateRoomByIdExcel() {
+        Room room = findRoomByIdExcel();
+        if (room != null) {
+            if (room.getTrangThai().equals(TinhTrang.DA_THUE)) {
+                System.out.println("Phòng đang được thuê, không thể cập nhật.");
+                return;
+            }
+            Room roomUpdate = inputRoomInfo();
+            roomUpdate.setID(room.getID());
+            roomUpdate.setTrangThai(room.getTrangThai());
+
+            int index = roomList.indexOf(room);
+            if (index != -1) {
+                roomList.set(index, roomUpdate);
+                System.out.println("Cập nhật phòng thành công.");
+            } else {
+                System.out.println("Lỗi: Cập nhật phòng thất bại");
+            }
+        }
+    }
 
     private long calculateRoomPrice(LoaiPhong loaiPhong) {
         long gia = 0L;

@@ -201,6 +201,7 @@ public class Main {
                     break;
                 case "4":
                     servicePhong.findAllRoomsExcel();
+                    servicePhong.updateRoomByIdExcel();
                     break;
                 case "5":
                     servicePhong.findAllRoomsExcel();

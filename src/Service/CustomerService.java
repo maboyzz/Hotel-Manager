@@ -74,6 +74,43 @@ public class CustomerService {
 
         return customer;
     }
+    public static Customer inputCustomerInfoCCCD() {
+        Customer customer = new Customer();
+        Scanner sc = new Scanner(System.in);
+        String ten;
+        String namSinh;
+        String cccd;
+        String soNguoi;
+
+        do {
+            System.out.println("nhập tên khách hàng: ");
+            ten = sc.nextLine();
+            if (!isInputBlank(ten) && isValidFullName(ten)) {
+                customer.setTen(ten);
+                break;
+            }
+        } while (true);
+        do {
+            System.out.println("nhập năm sinh: ");
+            namSinh = sc.nextLine();
+            if (!isInputBlank(namSinh) && isValidNamSinh(namSinh)) {
+                customer.setNamSinh(namSinh);
+                break;
+            }
+        } while (true);
+        tmp:
+        do {
+            System.out.println("nhập số người : ");
+            soNguoi = sc.nextLine();
+            if (!isInputBlank(soNguoi) && isValidSoNguoi(soNguoi)) {
+                customer.setSoNguoi(Integer.parseInt(soNguoi));
+                break;
+            }
+        } while (true);
+
+        return customer;
+    }
+
     public Customer addCustomerSQL() {
         System.out.println("Nhập thông tin khách hàng : ");
         Customer customer = inputCustomerInfo();
@@ -92,8 +129,16 @@ public class CustomerService {
         }
     }
     public static Customer addCustomerExcel(){
-        System.out.println("Enter room information : ");
+        System.out.println("Enter customer information : ");
         Customer customer = inputCustomerInfo();
+        customer.setID(getMaxId() + 1);
+        customerList.add(customer);
+        return customer;
+    }
+    public static Customer addCustomerCCCDExcel(String cccd){
+        System.out.println("Enter custom information : ");
+        Customer customer = inputCustomerInfoCCCD();
+        customer.setCCCD(cccd);
         customer.setID(getMaxId() + 1);
         customerList.add(customer);
         return customer;

@@ -33,7 +33,7 @@ public class BookingService {
 
     public void createCustomerAndBookingSQL() {
         Scanner sc = new Scanner(System.in);
-        Customer customer = customerService.addCustomerSQL(); // Tạo khách hàng
+        Customer customer = customerService.addCustomerSQL();
         Long khachHangId = new CustomerDAO().insertCustomer(customer);
 
         List<Room> phongTrong = new RoomDAO().findAvailableRooms();
@@ -182,7 +182,7 @@ public class BookingService {
             System.out.println("Khách hàng đã tồn tại, sử dụng lại ID: " + customer.getID());
         } else {
             // Nếu chưa có, nhập thông tin mới
-            customer = CustomerService.addCustomerExcel();
+            customer = CustomerService.inputCustomerInfoCCCD();
             customer.setID(getMaxId() + 1);
             customerList.add(customer);
             System.out.println("Đã thêm khách hàng mới: " + customer);
@@ -268,67 +268,81 @@ public class BookingService {
     }
 
     public void checkoutAndPaymentExcel() {
-        Scanner sc = new Scanner(System.in);
-        DatPhong datPhong = null;
-        Long bookingId = null;
-        do {
-            System.out.print("Nhập mã đặt phòng cần trả: ");
-            try {
-                bookingId = Long.parseLong(sc.nextLine());
-                for (DatPhong dp : bookingList) {
-                    if (dp.getId().equals(bookingId)) {
-                        datPhong = dp;
-                        break;
+
+        List<DatPhong> hoadons = new ArrayList<>();
+
+        for (DatPhong dp : bookingList) {
+            if (dp.getTrangThai().getDescription().equalsIgnoreCase("chưa thanh toán")) {
+                hoadons.add(dp);
+            }
+        }
+
+        if (!hoadons.isEmpty()) {
+            Scanner sc = new Scanner(System.in);
+            DatPhong datPhong = null;
+            Long bookingId = null;
+            do {
+                System.out.print("Nhập mã đặt phòng cần trả: ");
+                try {
+                    bookingId = Long.parseLong(sc.nextLine());
+                    for (DatPhong dp : bookingList) {
+                        if (dp.getId().equals(bookingId) && dp.getTrangThai().equals(TrangThai.CHUA_THANH_TOAN)) {
+                            datPhong = dp;
+                            break;
+                        }
                     }
+                    if (datPhong == null) {
+                        System.out.println("Không tìm thấy thông tin đặt phòng!");
+                        return;
+                    }
+                } catch (Exception e) {
+                    System.out.println("Mã đặt phòng không hợp lệ! Nhập lại.");
+                    return;
                 }
-                if (datPhong == null) {
-                    System.out.println("Không tìm thấy thông tin đặt phòng! Nhập lại.");
+            } while (datPhong == null);
+
+            Room room = null;
+            for (Room r : roomList) {
+                if (r.getID().equals(datPhong.getMaPhong())) {
+                    room = r;
+                    break;
                 }
-            } catch (Exception e) {
-                System.out.println("Mã đặt phòng không hợp lệ! Nhập lại.");
             }
-        } while (datPhong == null);
-
-        Room room = null;
-        for (Room r : roomList) {
-            if (r.getID().equals(datPhong.getMaPhong())) {
-                room = r;
-                break;
+            if (room == null) {
+                System.out.println("Không tìm thấy phòng!");
+                return;
             }
-        }
-        if (room == null) {
-            System.out.println("Không tìm thấy phòng!");
-            return;
-        }
 
-        Customer customer = null;
-        for (Customer c : customerList) {
-            if (c.getID().equals(datPhong.getMaKhachHang())) {
-                customer = c;
-                break;
+            Customer customer = null;
+            for (Customer c : customerList) {
+                if (c.getID().equals(datPhong.getMaKhachHang())) {
+                    customer = c;
+                    break;
+                }
             }
+            if (customer == null) {
+                System.out.println("Không tìm thấy khách hàng!");
+                return;
+            }
+
+            long soNgay = Duration.between(datPhong.getThoiGianDat(), datPhong.getThoiGianTra()).toDays();
+            if (soNgay <= 0) soNgay = 1;
+            long giaTien = room.getGiaPhong() * soNgay;
+
+            // 6. Cập nhật trạng thái
+            room.setTrangThai(TinhTrang.PHONG_TRONG);
+            datPhong.setTrangThai(TrangThai.DA_THANH_TOAN);
+
+            // 7. Hiển thị thông tin đúng
+            System.out.println("HÓA ĐƠN THANH TOÁN");
+            System.out.println("Khách thuê: " + customer.getTen() + " (CCCD: " + customer.getCCCD() + ")");
+            System.out.println("Phòng      : " + room.getTenPhong() + " - Giá/ngày: " + room.getGiaPhong());
+            System.out.println("Từ ngày    : " + datPhong.getThoiGianDat());
+            System.out.println("Đến ngày   : " + datPhong.getThoiGianTra());
+            System.out.println("Số ngày thuê: " + soNgay);
+            System.out.println("Thành tiền : " + giaTien + " VND");
         }
-        if (customer == null) {
-            System.out.println("Không tìm thấy khách hàng!");
-            return;
-        }
 
-        long soNgay = Duration.between(datPhong.getThoiGianDat(), datPhong.getThoiGianTra()).toDays();
-        if (soNgay <= 0) soNgay = 1;
-        long giaTien = room.getGiaPhong() * soNgay;
-
-        // 6. Cập nhật trạng thái
-        room.setTrangThai(TinhTrang.PHONG_TRONG);
-        datPhong.setTrangThai(TrangThai.DA_THANH_TOAN);
-
-        // 7. Hiển thị thông tin đúng
-        System.out.println("HÓA ĐƠN THANH TOÁN");
-        System.out.println("Khách thuê: " + customer.getTen() + " (CCCD: " + customer.getCCCD() + ")");
-        System.out.println("Phòng      : " + room.getTenPhong() + " - Giá/ngày: " + room.getGiaPhong());
-        System.out.println("Từ ngày    : " + datPhong.getThoiGianDat());
-        System.out.println("Đến ngày   : " + datPhong.getThoiGianTra());
-        System.out.println("Số ngày thuê: " + soNgay);
-        System.out.println("Thành tiền : " + giaTien + " VND");
     }
 
 
@@ -341,6 +355,7 @@ public class BookingService {
 
         if (hoadons.isEmpty()) {
             System.out.println("không có hóa đơn");
+            return;
         } else {
             for (DatPhong dp : hoadons) {
                 System.out.println(dp);
@@ -360,6 +375,7 @@ public class BookingService {
 
         if (hoadons.isEmpty()) {
             System.out.println("không có hóa đơn");
+            return;
         } else {
             for (DatPhong dp : hoadons) {
                 System.out.println(dp);
