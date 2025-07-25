@@ -244,7 +244,9 @@ public class Main {
         while (!back) {
             System.out.println("\n--- Quản lý Khách hàng ---");
             System.out.println("1. Tìm kiếm khách hàng");
-            System.out.println("2. Quay lại");
+            System.out.println("2. Cập nhật thông tin khách hàng");
+            System.out.println("3. Xóa khách hàng");
+            System.out.println("4. Quay lại");
             System.out.print("Nhập lựa chọn: ");
 
             String choice = sc.nextLine().trim();
@@ -253,6 +255,14 @@ public class Main {
                     customerService.findAllCustomersExcel();
                     break;
                 case "2":
+                    customerService.findAllCustomersExcel();
+                    customerService.updateCustomerByIdExcel();
+                    break;
+                case "3":
+                    customerService.findAllCustomersExcel();
+                    customerService.deleteCustomerByIdExcel();
+                    break;
+                case "4":
                     back = true;
                     break;
                 default:

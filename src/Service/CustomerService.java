@@ -151,6 +151,60 @@ public class CustomerService {
             }
         }
     }
+    public void deleteCustomerByIdExcel() {
+        if (customerList != null && !customerList.isEmpty()) {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Nhập ID của khách hàng để xóa: ");
+            Long id = sc.nextLong();
+
+            Customer found = null;
+            for (Customer customer : customerList) {
+                if (customer.getID().equals(id)) {
+                    found = customer;
+                    break;
+                }
+            }
+
+            if (found != null) {
+                customerList.remove(found);
+                System.out.println("Xóa khách hàng thành công.");
+            } else {
+                System.out.println("Xóa thất bại, không tìm thấy khách hàng trong dữ liệu.");
+            }
+        } else {
+            System.out.println("Danh sách khách hàng rỗng.");
+        }
+    }
+    public void updateCustomerByIdExcel() {
+        if (customerList != null && !customerList.isEmpty()) {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Nhập ID của khách hàng để cập nhật: ");
+            Long id = sc.nextLong();
+            sc.nextLine();
+
+            Customer found = null;
+            for (Customer customer : customerList) {
+                if (customer.getID().equals(id)) {
+                    found = customer;
+                    break;
+                }
+            }
+
+            if (found != null) {
+                Customer updatedCustomer = inputCustomerInfo();
+                updatedCustomer.setID(id);
+
+                int index = customerList.indexOf(found);
+                customerList.set(index, updatedCustomer);
+
+                System.out.println("Cập nhật khách hàng thành công.");
+            } else {
+                System.out.println("Không tìm thấy khách hàng với ID đã nhập.");
+            }
+        } else {
+            System.out.println("Danh sách khách hàng rỗng.");
+        }
+    }
     public void saveCustomerListToExcel(String filePath) {
         List<String[]> data = new ArrayList<>();
         // Add room data to the list

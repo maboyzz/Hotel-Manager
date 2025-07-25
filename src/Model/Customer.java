@@ -24,8 +24,8 @@ public class Customer extends Person{
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "Họ tên='" + getTen() + '\'' +
+        return "Customer{" +"ID= "+getID()+'\'' +
+                ", Họ tên='" + getTen() + '\'' +
                 ", Năm sinh='" + getNamSinh() + '\'' +
                 ", CCCD='" + getCCCD() + '\'' +
                 ", Số người=" + soNguoi +
