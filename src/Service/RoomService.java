@@ -145,7 +145,7 @@ public class RoomService {
 
     public void findAllRoomsSQL() {
 
-
+        printHeader();
         List<Room> rooms = new RoomDAO().findAllRooms();
         if (rooms.isEmpty()) {
             System.out.println("No rooms found.");
@@ -153,6 +153,7 @@ public class RoomService {
             for (Room room : rooms) {
                 System.out.println(room);
             }
+            System.out.println("+----+--------+---------------------+------------+---------------+-------------------------------------------------------------+-----------+");
         }
     }
 
@@ -175,6 +176,7 @@ public class RoomService {
 
 
     }
+
     public void deleteRoomSQL() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Nhập mã Phòng :");
@@ -200,11 +202,14 @@ public class RoomService {
     }
 
     public void findAllRoomsExcel() {
-        System.out.println("tất cả các phòng hiện có trong hệ thống : ");
-        if (roomList != null) {
-            for (Room room : roomList) {
-                System.out.println("\n" + room.toString());
+         if (roomList != null) {
+             printHeader();
+             for (Room room : roomList) {
+                System.out.println(room);
+
             }
+             System.out.println("+----+--------+---------------------+------------+---------------+-------------------------------------------------------------+-----------+");
+
         }
     }
 
@@ -222,24 +227,28 @@ public class RoomService {
                     String.valueOf(room.getGiaPhong())
             });
         }
-        String[] headers = {"ID Phòng", "Tên Phòng", "Loại Phòng", "Kich Thước", "Trạng Thái","Chức Năng","Giá Tiền"};
-        exportToExcel(data, headers,filePath);
+        String[] headers = {"ID Phòng", "Tên Phòng", "Loại Phòng", "Kich Thước", "Trạng Thái", "Chức Năng", "Giá Tiền"};
+        exportToExcel(data, headers, filePath);
         System.out.println("Danh sách phòng đã được lưu vào file: " + filePath);
     }
 
     public void findAvailableRoomsExcel() {
         Scanner sc = new Scanner(System.in);
         boolean found = false;
+        printHeader();
         for (Room room : roomList) {
             if (room.getTrangThai().getDescription().equalsIgnoreCase("phòng trống")) {
-                System.out.println("Phong trong: " + room);
+                System.out.println(room);
                 found = true;
             }
         }
+        System.out.println("+----+--------+---------------------+------------+---------------+-------------------------------------------------------------+-----------+");
+
         if (!found) {
             System.out.println("Khong tim thay phong trong");
         }
     }
+
     public Room findRoomByIdExcel() {
         Scanner sc = new Scanner(System.in);
         System.out.println("Nhập Id phòng :");
@@ -251,17 +260,19 @@ public class RoomService {
         }
         return null;
     }
-public void deleteRoomByIdExcel(){
+
+    public void deleteRoomByIdExcel() {
         Room room = findRoomByIdExcel();
-        if(room != null){
-            if(room.getTrangThai().equals(TinhTrang.DA_THUE)){
+        if (room != null) {
+            if (room.getTrangThai().equals(TinhTrang.DA_THUE)) {
                 System.out.println("phòng đang thuê không thể xóa");
                 return;
             }
             roomList.remove(room);
             System.out.println("Xóa phòng thành công");
         }
-}
+    }
+
     public void updateRoomByIdExcel() {
         Room room = findRoomByIdExcel();
         if (room != null) {
@@ -298,6 +309,7 @@ public void deleteRoomByIdExcel(){
         }
         return gia;
     }
+
     public void loadRoomListFromExcel(String filePath) {
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = new XSSFWorkbook(fis)) {
@@ -329,6 +341,7 @@ public void deleteRoomByIdExcel(){
             System.out.println("P Lỗi định dạng dữ liệu trong file Excel: " + e.getMessage());
         }
     }
+
     private Long getLongValue(Cell cell) {
         if (cell == null) return null;
         if (cell.getCellType() == CellType.NUMERIC) {
@@ -337,5 +350,12 @@ public void deleteRoomByIdExcel(){
             return Long.parseLong(cell.getStringCellValue());
         }
         return null;
+    }
+
+    public static void printHeader() {
+        System.out.println("+----+--------+--------------------+------------+---------------+--------------------------------------------------------------+-----------+");
+        System.out.printf("| %-2s | %-6s | %-18s | %-10s | %-13s | %-60s | %-9s |\n",
+                "ID", "Mã", "Loại", "Kích thước", "Trạng thái", "Tính năng", "Giá");
+        System.out.println("+----+--------+--------------------+------------+---------------+--------------------------------------------------------------+-----------+");
     }
 }

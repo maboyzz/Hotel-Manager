@@ -3,7 +3,9 @@ package Model;
 import constant.TrangThai;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class DatPhong {
     private Long id;
@@ -85,14 +87,32 @@ public class DatPhong {
 
     @Override
     public String toString() {
-        return "DatPhong{" +
-                "id=" + id +
-                ", khachHang=" + maKhachHang +
-                ", phong=" + maPhong +
-                ", thoiGianDat=" + thoiGianDat +
-                ", thoiGianTra=" + thoiGianTra +
-                ", ghiChu='" + ghiChu + '\'' +
-                ", trangThai=" + trangThai+
-                '}';
+        int width = 30; // chiều dài tối đa mỗi dòng ghi chú
+        List<String> ghiChuLines = splitText(ghiChu, width);
+
+        StringBuilder sb = new StringBuilder();
+
+        // Dòng đầu tiên in đủ
+        sb.append(String.format("| %-4s | %-10s | %-8s | %-19s | %-19s | %-30s | %-10s |",
+                id, maKhachHang, maPhong, thoiGianDat, thoiGianTra, ghiChuLines.get(0), trangThai));
+
+        // Các dòng tiếp theo in tiếp phần ghi chú
+        for (int i = 1; i < ghiChuLines.size(); i++) {
+            sb.append(String.format("\n| %-4s | %-10s | %-8s | %-19s | %-19s | %-30s | %-10s |",
+                    "", "", "", "", "", ghiChuLines.get(i), ""));
+        }
+
+        return sb.toString();
+    }
+    private List<String> splitText(String text, int maxLength) {
+        List<String> result = new ArrayList<>();
+        while (text.length() > maxLength) {
+            int splitPos = text.lastIndexOf(" ", maxLength);
+            if (splitPos == -1) splitPos = maxLength;
+            result.add(text.substring(0, splitPos).trim());
+            text = text.substring(splitPos).trim();
+        }
+        result.add(text);
+        return result;
     }
 }

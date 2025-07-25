@@ -123,9 +123,11 @@ public class CustomerService {
         if (customers.isEmpty()) {
             System.out.println("Không có khách hàng nào");
         } else {
+            printHeader();
             for (Customer customer : customers) {
                 System.out.println(customer);
             }
+            System.out.println("+------------+----------------------+------------+-----------------+------------+");
         }
     }
     public void updateCustomerByIdSQL() {
@@ -207,10 +209,12 @@ public class CustomerService {
     }
     public void findAllCustomersExcel() {
         System.out.println("tất cả các khách hàng hiện có trong hệ thống : ");
+        printHeader();
         if (customerList != null) {
             for (Customer customer : customerList) {
-                System.out.println("\n" + customer.toString());
+                System.out.println(customer.toString());
             }
+            System.out.println("+------------+----------------------+------------+-----------------+------------+");
         }
     }
     public void deleteCustomerByIdExcel() {
@@ -341,5 +345,11 @@ public class CustomerService {
             return Integer.parseInt(cell.getStringCellValue());
         }
         return null;
+    }
+    public static void printHeader() {
+        System.out.println("+------------+----------------------+------------+-----------------+------------+");
+        System.out.printf("| %-10s | %-20s | %-10s | %-15s | %-10s |\n",
+                "ID", "Họ tên", "Năm sinh", "CCCD", "Số người");
+        System.out.println("+------------+----------------------+------------+-----------------+------------+");
     }
 }

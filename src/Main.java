@@ -39,7 +39,6 @@ public class Main {
         }
         boolean isExit = false;
 
-        // Tự động lưu file Excel khi thoát chương trình
 
 
         while (!isExit) {
@@ -68,20 +67,26 @@ public class Main {
     }
 
     private static void displayMainMenu() {
-        System.out.println("\n=== Hotel Manager ===");
-        System.out.println("1. Quản lý Phòng SQL");
-        System.out.println("2. Quản lý Phòng Excel");
-        System.out.println("3. Thoát");
+        System.out.println("\n+--------------------------------+");
+        System.out.println("|       === Hotel Manager ===    |");
+        System.out.println("+--------------------------------+");
+        System.out.printf("| %-30s |\n", "1. Quản lý Phòng SQL");
+        System.out.printf("| %-30s |\n", "2. Quản lý Phòng Excel");
+        System.out.printf("| %-30s |\n", "3. Thoát");
+        System.out.println("+--------------------------------+");
     }
 
     private static void handleSQLMenu(BookingService bookingService, CustomerService customerService, RoomService servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
-            System.out.println("\n=== Quản lý SQL ===");
-            System.out.println("1. Quản lý Phòng");
-            System.out.println("2. Quản lý Khách hàng");
-            System.out.println("3. Quản lý Đặt phòng / Thanh toán");
-            System.out.println("4. Quay lại");
+            System.out.println("\n+--------------------------------------------+");
+            System.out.println("|             === Quản lý SQL ===            |");
+            System.out.println("+--------------------------------------------+");
+            System.out.printf("| %-42s |\n", "1. Quản lý Phòng");
+            System.out.printf("| %-42s |\n", "2. Quản lý Khách hàng");
+            System.out.printf("| %-42s |\n", "3. Quản lý Đặt phòng / Thanh toán");
+            System.out.printf("| %-42s |\n", "4. Quay lại");
+            System.out.println("+--------------------------------------------+");
             System.out.print("Nhập lựa chọn: ");
 
             String choice = sc.nextLine().trim();
@@ -108,11 +113,14 @@ public class Main {
     private static void handleExelMenu(BookingService bookingService, CustomerService customerService, RoomService servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
-            System.out.println("\n=== Quản lý EXCEL ===");
-            System.out.println("1. Quản lý Phòng");
-            System.out.println("2. Quản lý Khách hàng");
-            System.out.println("3. Quản lý Đặt phòng / Thanh toán");
-            System.out.println("4. Quay lại");
+            System.out.println("\n+--------------------------------------------+");
+            System.out.println("|             === Quản lý EXCEL ===          |");
+            System.out.println("+--------------------------------------------+");
+            System.out.printf("| %-42s |\n", "1. Quản lý Phòng");
+            System.out.printf("| %-42s |\n", "2. Quản lý Khách hàng");
+            System.out.printf("| %-42s |\n", "3. Quản lý Đặt phòng / Thanh toán");
+            System.out.printf("| %-42s |\n", "4. Quay lại");
+            System.out.println("+--------------------------------------------+");
             System.out.print("Nhập lựa chọn: ");
 
             String choice = sc.nextLine().trim();
@@ -139,13 +147,16 @@ public class Main {
     private static void handleRoomMenuSQL(RoomService servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
-            System.out.println("\n--- Quản lý Phòng ---");
-            System.out.println("1. Tìm kiếm phòng trống");
-            System.out.println("2. Hiển thị tất cả phòng");
-            System.out.println("3. Thêm phòng mới");
-            System.out.println("4. Cập nhật phòng");
-            System.out.println("5. Xóa phòng");
-            System.out.println("6. Quay lại");
+            System.out.println("\n+--------------------------------------------+");
+            System.out.println("|           --- Quản lý Phòng SQL ---        |");
+            System.out.println("+--------------------------------------------+");
+            System.out.printf("| %-42s |\n", "1. Tìm kiếm phòng trống");
+            System.out.printf("| %-42s |\n", "2. Hiển thị tất cả phòng");
+            System.out.printf("| %-42s |\n", "3. Thêm phòng mới");
+            System.out.printf("| %-42s |\n", "4. Cập nhật phòng");
+            System.out.printf("| %-42s |\n", "5. Xóa phòng");
+            System.out.printf("| %-42s |\n", "6. Quay lại");
+            System.out.println("+--------------------------------------------+");
             System.out.print("Nhập lựa chọn: ");
 
             String choice = sc.nextLine().trim();
@@ -179,13 +190,16 @@ public class Main {
     private static void handleRoomMenuExel(RoomService servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
-            System.out.println("\n--- Quản lý Phòng ---");
-            System.out.println("1. Tìm kiếm phòng trống");
-            System.out.println("2. Hiển thị tất cả phòng");
-            System.out.println("3. Thêm phòng mới");
-            System.out.println("4. Cập nhật phòng");
-            System.out.println("5. Xóa phòng");
-            System.out.println("6. Quay lại");
+            System.out.println("\n+--------------------------------------------+");
+            System.out.println("|           --- Quản lý Phòng EXCEL---        |");
+            System.out.println("+--------------------------------------------+");
+            System.out.printf("| %-42s |\n", "1. Tìm kiếm phòng trống");
+            System.out.printf("| %-42s |\n", "2. Hiển thị tất cả phòng");
+            System.out.printf("| %-42s |\n", "3. Thêm phòng mới");
+            System.out.printf("| %-42s |\n", "4. Cập nhật phòng");
+            System.out.printf("| %-42s |\n", "5. Xóa phòng");
+            System.out.printf("| %-42s |\n", "6. Quay lại");
+            System.out.println("+--------------------------------------------+");
             System.out.print("Nhập lựa chọn: ");
 
             String choice = sc.nextLine().trim();
@@ -220,11 +234,14 @@ public class Main {
     private static void handleCustomerMenuSQL(CustomerService customerService, Scanner sc) {
         boolean back = false;
         while (!back) {
-            System.out.println("\n--- Quản lý Khách hàng ---");
-            System.out.println("1. Tìm kiếm khách hàng");
-            System.out.println("2. Cập nhật khách hàng");
-            System.out.println("3. Xóa khách hàng");
-            System.out.println("4. Quay lại");
+            System.out.println("\n+--------------------------------------------+");
+            System.out.println("|        --- Quản lý Khách hàng SQL---       |");
+            System.out.println("+--------------------------------------------+");
+            System.out.printf("| %-42s |\n", "1. Hiển thị toàn bộ khách hàng");
+            System.out.printf("| %-42s |\n", "2. Cập nhật khách hàng");
+            System.out.printf("| %-42s |\n", "3. Xóa khách hàng");
+            System.out.printf("| %-42s |\n", "4. Quay lại");
+            System.out.println("+--------------------------------------------+");
             System.out.print("Nhập lựa chọn: ");
 
             String choice = sc.nextLine().trim();
@@ -252,11 +269,14 @@ public class Main {
     private static void handleCustomerMenuExel(CustomerService customerService, Scanner sc) {
         boolean back = false;
         while (!back) {
-            System.out.println("\n--- Quản lý Khách hàng ---");
-            System.out.println("1. Tìm kiếm khách hàng");
-            System.out.println("2. Cập nhật thông tin khách hàng");
-            System.out.println("3. Xóa khách hàng");
-            System.out.println("4. Quay lại");
+            System.out.println("\n+--------------------------------------------+");
+            System.out.println("|      --- Quản lý Khách hàng EXCEL---       |");
+            System.out.println("+--------------------------------------------+");
+            System.out.printf("| %-42s |\n", "1. Hiển thị toàn bộ khách hàng");
+            System.out.printf("| %-42s |\n", "2. Cập nhật khách hàng");
+            System.out.printf("| %-42s |\n", "3. Xóa khách hàng");
+            System.out.printf("| %-42s |\n", "4. Quay lại");
+            System.out.println("+--------------------------------------------+");
             System.out.print("Nhập lựa chọn: ");
 
             String choice = sc.nextLine().trim();
@@ -285,12 +305,15 @@ public class Main {
     private static void handleBookingMenuSQL(BookingService bookingService, Scanner sc) {
         boolean back = false;
         while (!back) {
-            System.out.println("\n--- Quản lý Đặt phòng & Thanh toán ---");
-            System.out.println("1. Tạo đặt phòng");
-            System.out.println("2. Xem danh sách hóa đơn");
-            System.out.println("3. Trả phòng và thanh toán");
-            System.out.println("4. Quay lại");
-            System.out.print("Nhập lựa chọn: ");
+                System.out.println("\n+--------------------------------------------+");
+                System.out.println("|    --- Quản lý Đặt phòng & Thanh toán ---  |");
+                System.out.println("+--------------------------------------------+");
+                System.out.printf("| %-42s |\n", "1. Tạo đặt phòng");
+                System.out.printf("| %-42s |\n", "2. Xem danh sách hóa đơn");
+                System.out.printf("| %-42s |\n", "3. Trả phòng và thanh toán");
+                System.out.printf("| %-42s |\n", "4. Quay lại");
+                System.out.println("+--------------------------------------------+");
+                System.out.print("Nhập lựa chọn: ");
 
             String choice = sc.nextLine().trim();
             switch (choice) {
@@ -317,11 +340,14 @@ public class Main {
     private static void handleBookingMenuExel(BookingService bookingService, Scanner sc) {
         boolean back = false;
         while (!back) {
-            System.out.println("\n--- Quản lý Đặt phòng & Thanh toán ---");
-            System.out.println("1. Tạo đặt phòng");
-            System.out.println("2. Xem danh sách hóa đơn");
-            System.out.println("3. Trả phòng và thanh toán");
-            System.out.println("4. Quay lại");
+            System.out.println("\n+--------------------------------------------+");
+            System.out.println("|    --- Quản lý Đặt phòng & Thanh toán ---  |");
+            System.out.println("+--------------------------------------------+");
+            System.out.printf("| %-42s |\n", "1. Tạo đặt phòng");
+            System.out.printf("| %-42s |\n", "2. Xem danh sách hóa đơn");
+            System.out.printf("| %-42s |\n", "3. Trả phòng và thanh toán");
+            System.out.printf("| %-42s |\n", "4. Quay lại");
+            System.out.println("+--------------------------------------------+");
             System.out.print("Nhập lựa chọn: ");
 
             String choice = sc.nextLine().trim();

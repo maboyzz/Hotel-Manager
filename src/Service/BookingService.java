@@ -145,9 +145,12 @@ public class BookingService {
         if (hoadons.isEmpty()) {
             System.out.println("không có hóa đơn");
         } else {
+            printHeader();
             for (DatPhong dp : hoadons) {
                 System.out.println(dp);
             }
+            System.out.println("+------+------------+----------+---------------------+---------------------+--------------------------------+---------------+");
+
         }
     }
 
@@ -156,9 +159,11 @@ public class BookingService {
         if (hoadons.isEmpty()) {
             System.out.println("không có hóa đơn");
         } else {
+            printHeader();
             for (DatPhong dp : hoadons) {
                 System.out.println(dp);
             }
+            System.out.println("+------+------------+----------+---------------------+---------------------+--------------------------------+---------------+");
         }
     }
 
@@ -347,20 +352,16 @@ public class BookingService {
 
 
     public void showAllInvoicesExcel() {
-        List<DatPhong> hoadons = new ArrayList<>();
-
-        for (DatPhong dp : bookingList) {
-            hoadons.add(dp);
-        }
-
-        if (hoadons.isEmpty()) {
-            System.out.println("không có hóa đơn");
+        if (bookingList.isEmpty()) {
+            System.out.println("Không có hóa đơn.");
             return;
-        } else {
-            for (DatPhong dp : hoadons) {
-                System.out.println(dp);
-            }
         }
+
+        printHeader();
+        for (DatPhong dp : bookingList) {
+            System.out.println(dp);
+        }
+        System.out.println("+------+------------+----------+---------------------+---------------------+--------------------------------+---------------+");
     }
 
     public void showUnpaidInvoicesExcel() {
@@ -377,10 +378,19 @@ public class BookingService {
             System.out.println("không có hóa đơn");
             return;
         } else {
+            printHeader();
             for (DatPhong dp : hoadons) {
                 System.out.println(dp);
             }
+            System.out.println("+------+------------+----------+---------------------+---------------------+--------------------------------+---------------+");
+
         }
+    }
+    public void printHeader() {
+        System.out.println("+------+------------+----------+---------------------+---------------------+--------------------------------+---------------+");
+        System.out.printf("| %-4s | %-10s | %-8s | %-19s | %-19s | %-30s | %-10s    |\n",
+                "ID", "Khách", "Phòng", "Thời gian đặt", "Thời gian trả", "Ghi chú", "Trạng thái");
+        System.out.println("+------+------------+----------+---------------------+---------------------+-----------------------------------+------------+");
     }
 
     public void saveBookingListToExcel(String filePath) {
@@ -462,4 +472,5 @@ public class BookingService {
         }
         return null;
     }
+
 }

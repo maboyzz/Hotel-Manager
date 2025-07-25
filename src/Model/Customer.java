@@ -24,11 +24,7 @@ public class Customer extends Person{
 
     @Override
     public String toString() {
-        return "Customer{" +"ID= "+getID()+'\'' +
-                ", Họ tên='" + getTen() + '\'' +
-                ", Năm sinh='" + getNamSinh() + '\'' +
-                ", CCCD='" + getCCCD() + '\'' +
-                ", Số người=" + soNguoi +
-                '}';
+        return String.format("| %-10s | %-20s | %-10s | %-15s | %-10s |",
+                getID(), getTen(), getNamSinh(), getCCCD(), soNguoi);
     }
 }
