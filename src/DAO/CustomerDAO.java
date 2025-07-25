@@ -104,4 +104,52 @@ public class CustomerDAO {
         }
         return customer;
     }
+    public boolean updateCustomerByID(Customer customer) {
+        String sql = "UPDATE khach_hang SET ten = ?, nam_sinh = ?, cccd = ?, so_nguoi = ? WHERE id = ?";
+        try (Connection conn = DAOConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, customer.getTen());
+            stmt.setString(2, customer.getNamSinh());
+            stmt.setString(3, customer.getCCCD());
+            stmt.setInt(4, customer.getSoNguoi());
+            stmt.setLong(5, customer.getID());
+
+            int rows = stmt.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println(" Cập nhật khách hàng thành công!");
+                return true;
+            } else {
+                System.out.println(" Không tìm thấy khách hàng để cập nhật!");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.out.println(" Lỗi khi cập nhật khách hàng: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean deleteCustomerById(Long id) {
+        String sql = "DELETE FROM khach_hang WHERE id = ?";
+
+        try (Connection conn = DAOConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+            int rows = stmt.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println("Xóa khách hàng thành công!");
+                return true;
+            } else {
+                System.out.println("Không tìm thấy khách hàng để xóa!");
+                return false;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Lỗi khi xóa khách hàng: " + e.getMessage());
+            return false;
+        }
+    }
 }

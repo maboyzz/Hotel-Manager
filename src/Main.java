@@ -108,7 +108,7 @@ public class Main {
     private static void handleExelMenu(BookingService bookingService, CustomerService customerService, RoomService servicePhong, Scanner sc) {
         boolean back = false;
         while (!back) {
-            System.out.println("\n=== Quản lý SQL ===");
+            System.out.println("\n=== Quản lý EXCEL ===");
             System.out.println("1. Quản lý Phòng");
             System.out.println("2. Quản lý Khách hàng");
             System.out.println("3. Quản lý Đặt phòng / Thanh toán");
@@ -222,7 +222,9 @@ public class Main {
         while (!back) {
             System.out.println("\n--- Quản lý Khách hàng ---");
             System.out.println("1. Tìm kiếm khách hàng");
-            System.out.println("2. Quay lại");
+            System.out.println("2. Cập nhật khách hàng");
+            System.out.println("3. Xóa khách hàng");
+            System.out.println("4. Quay lại");
             System.out.print("Nhập lựa chọn: ");
 
             String choice = sc.nextLine().trim();
@@ -231,6 +233,14 @@ public class Main {
                     customerService.findAllCustomersSQL();
                     break;
                 case "2":
+                    customerService.findAllCustomersSQL();
+                    customerService.updateCustomerByIdSQL();
+                    break;
+                case "3":
+                    customerService.findAllCustomersSQL();
+                    customerService.deleteCustomerByIdSQL();
+                    break;
+                case "4":
                     back = true;
                     break;
                 default:

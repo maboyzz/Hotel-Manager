@@ -128,6 +128,68 @@ public class CustomerService {
             }
         }
     }
+    public void updateCustomerByIdSQL() {
+        List<Customer> customers = new CustomerDAO().findAllCustomers();
+
+        if (customers.isEmpty()) {
+            System.out.println("Không có khách hàng nào trong hệ thống.");
+            return;
+        }
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Nhập ID khách hàng cần cập nhật: ");
+        long id = sc.nextLong();
+        sc.nextLine(); // Xóa dòng new line còn lại
+
+        Customer customer = new CustomerDAO().findCustomerById(id);
+        if (customer == null) {
+            System.out.println("Không tìm thấy khách hàng với ID: " + id);
+            return;
+        }
+
+        System.out.println("Khách hàng hiện tại:");
+        System.out.println(customer);
+
+        Customer updateCustomer = inputCustomerInfo();
+        updateCustomer.setID(customer.getID());
+
+        boolean success = new CustomerDAO().updateCustomerByID(updateCustomer);
+        if (success) {
+            System.out.println("Cập nhật thông tin khách hàng thành công.");
+        } else {
+            System.out.println("Cập nhật thất bại.");
+        }
+    }
+    public void deleteCustomerByIdSQL(){
+        List<Customer> customers = new CustomerDAO().findAllCustomers();
+
+        if (customers.isEmpty()) {
+            System.out.println("Không có khách hàng nào trong hệ thống.");
+            return;
+        }
+
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Nhập ID khách hàng cần xóa: ");
+        long id = sc.nextLong();
+        sc.nextLine();
+
+        Customer customer = new CustomerDAO().findCustomerById(id);
+        if (customer == null) {
+            System.out.println("Không tìm thấy khách hàng với ID: " + id);
+            return;
+        }
+
+        System.out.println("Khách hàng hiện tại:");
+        System.out.println(customer);
+
+        boolean success = new CustomerDAO().deleteCustomerById(customer.getID());
+        if (success) {
+            System.out.println("Xóa khách hàng thành công.");
+        } else {
+            System.out.println("Xóa thất bại.");
+        }
+
+    }
     public static Customer addCustomerExcel(){
         System.out.println("Enter customer information : ");
         Customer customer = inputCustomerInfo();
