@@ -42,7 +42,7 @@ public class CustomerService {
             System.out.println("nhập tên khách hàng: ");
             ten = sc.nextLine();
             if (!isInputBlank(ten) && isValidFullName(ten)) {
-                customer.setTen(ten);
+                customer.setName(ten);
                 break;
             }
         } while (true);
@@ -50,7 +50,7 @@ public class CustomerService {
             System.out.println("nhập năm sinh: ");
             namSinh = sc.nextLine();
             if (!isInputBlank(namSinh) && isValidNamSinh(namSinh)) {
-                customer.setNamSinh(namSinh);
+                customer.setBirthYear(namSinh);
                 break;
             }
         } while (true);
@@ -58,7 +58,7 @@ public class CustomerService {
             System.out.println("Nhập căn cước công dân ");
             cccd = sc.nextLine();
             if (!isInputBlank(cccd) && isValidCCCD(cccd)) {
-                customer.setCCCD(cccd);
+                customer.setCitizenId(cccd);
                 break;
             }
         } while (true);
@@ -67,7 +67,7 @@ public class CustomerService {
             System.out.println("nhập số người : ");
             soNguoi = sc.nextLine();
             if (!isInputBlank(soNguoi) && isValidSoNguoi(soNguoi)) {
-                customer.setSoNguoi(Integer.parseInt(soNguoi));
+                customer.setNumberOfPeople(Integer.parseInt(soNguoi));
                 break;
             }
         } while (true);
@@ -86,7 +86,7 @@ public class CustomerService {
             System.out.println("nhập tên khách hàng: ");
             ten = sc.nextLine();
             if (!isInputBlank(ten) && isValidFullName(ten)) {
-                customer.setTen(ten);
+                customer.setName(ten);
                 break;
             }
         } while (true);
@@ -94,7 +94,7 @@ public class CustomerService {
             System.out.println("nhập năm sinh: ");
             namSinh = sc.nextLine();
             if (!isInputBlank(namSinh) && isValidNamSinh(namSinh)) {
-                customer.setNamSinh(namSinh);
+                customer.setBirthYear(namSinh);
                 break;
             }
         } while (true);
@@ -103,7 +103,7 @@ public class CustomerService {
             System.out.println("nhập số người : ");
             soNguoi = sc.nextLine();
             if (!isInputBlank(soNguoi) && isValidSoNguoi(soNguoi)) {
-                customer.setSoNguoi(Integer.parseInt(soNguoi));
+                customer.setNumberOfPeople(Integer.parseInt(soNguoi));
                 break;
             }
         } while (true);
@@ -202,7 +202,7 @@ public class CustomerService {
     public static Customer addCustomerCCCDExcel(String cccd){
         System.out.println("Enter custom information : ");
         Customer customer = inputCustomerInfoCCCD();
-        customer.setCCCD(cccd);
+        customer.setCitizenId(cccd);
         customer.setID(getMaxId() + 1);
         customerList.add(customer);
         return customer;
@@ -277,10 +277,10 @@ public class CustomerService {
         for (Customer customer : customerList) {
             data.add(new String[]{
                     String.valueOf(customer.getID()),
-                    customer.getTen(),
-                    customer.getNamSinh(),
-                    customer.getCCCD(),
-                    String.valueOf(customer.getSoNguoi())
+                    customer.getName(),
+                    customer.getBirthYear(),
+                    customer.getCitizenId(),
+                    String.valueOf(customer.getNumberOfPeople())
             });
         }
         String[] headers = {"ID Khách Hàng", "Tên Khách Hàng", "Năm Sinh", "Số CCCD", "Số Người"};
@@ -300,10 +300,10 @@ public class CustomerService {
 
                 Customer customer = new Customer();
                 customer.setID(getLongValue(row.getCell(0)));
-                customer.setTen(row.getCell(1).getStringCellValue());
-                customer.setNamSinh(row.getCell(2).getStringCellValue());
-                customer.setCCCD(row.getCell(3).getStringCellValue());
-                customer.setSoNguoi(getIntValue(row.getCell(4)));
+                customer.setName(row.getCell(1).getStringCellValue());
+                customer.setBirthYear(row.getCell(2).getStringCellValue());
+                customer.setCitizenId(row.getCell(3).getStringCellValue());
+                customer.setNumberOfPeople(getIntValue(row.getCell(4)));
                 customerList.add(customer);
 
             }

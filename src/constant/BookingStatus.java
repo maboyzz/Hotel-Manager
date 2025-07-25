@@ -1,14 +1,13 @@
 package constant;
 
-public enum LoaiPhong {
-    PHONG_DON("Phòng đơn"),
-    PHONG_DOI("Phòng đôi"),
-    PHONG_VIP("Phòng vip"),
-    PHONG_TONG_THONG("Phòng tổng thống");
+public enum BookingStatus {
+    DA_THANH_TOAN("Đã thanh toán"),
+    CHUA_THANH_TOAN("Chưa thanh toán");
+
 
     private String description;
 
-    LoaiPhong(String description) {
+    BookingStatus(String description) {
         this.description = description;
     }
 

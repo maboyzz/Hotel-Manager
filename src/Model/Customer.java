@@ -1,30 +1,28 @@
 package Model;
 
-import java.util.Date;
-
 public class Customer extends Person{
 
-    private int soNguoi;
+    private int numberOfPeople;
 
-    public Customer(Long ID, String ten, String namSinh, String CCCD, int soNguoi) {
+    public Customer(Long ID, String ten, String namSinh, String CCCD, int numberOfPeople) {
         super(ID, ten, namSinh, CCCD);
-        this.soNguoi = soNguoi;
+        this.numberOfPeople = numberOfPeople;
     }
     public Customer() {
         super();
     }
 
-    public int getSoNguoi() {
-        return soNguoi;
+    public int getNumberOfPeople() {
+        return numberOfPeople;
     }
 
-    public void setSoNguoi(int soNguoi) {
-        this.soNguoi = soNguoi;
+    public void setNumberOfPeople(int numberOfPeople) {
+        this.numberOfPeople = numberOfPeople;
     }
 
     @Override
     public String toString() {
         return String.format("| %-10s | %-20s | %-10s | %-15s | %-10s |",
-                getID(), getTen(), getNamSinh(), getCCCD(), soNguoi);
+                getID(), getName(), getBirthYear(), getCitizenId(), numberOfPeople);
     }
 }

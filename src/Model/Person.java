@@ -1,18 +1,16 @@
 package Model;
 
-import java.util.Date;
-
 public class Person {
     private Long ID;
-    private String ten;
-    private String namSinh;
-    private String CCCD;
+    private String name;
+    private String birthYear;
+    private String citizenId;
 
-    public Person(Long ID, String ten, String namSinh, String CCCD) {
+    public Person(Long ID, String name, String birthYear, String citizenId) {
         this.ID = ID;
-        this.ten = ten;
-        this.namSinh = namSinh;
-        this.CCCD = CCCD;
+        this.name = name;
+        this.birthYear = birthYear;
+        this.citizenId = citizenId;
     }
 
     public Person() {
@@ -27,37 +25,37 @@ public class Person {
         this.ID = ID;
     }
 
-    public String getTen() {
-        return ten;
+    public String getName() {
+        return name;
     }
 
-    public void setTen(String ten) {
-        this.ten = ten;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getNamSinh() {
-        return namSinh;
+    public String getBirthYear() {
+        return birthYear;
     }
 
-    public void setNamSinh(String namSinh) {
-        this.namSinh = namSinh;
+    public void setBirthYear(String birthYear) {
+        this.birthYear = birthYear;
     }
 
-    public String getCCCD() {
-        return CCCD;
+    public String getCitizenId() {
+        return citizenId;
     }
 
-    public void setCCCD(String CCCD) {
-        this.CCCD = CCCD;
+    public void setCitizenId(String citizenId) {
+        this.citizenId = citizenId;
     }
 
     @Override
     public String toString() {
         return "Person{" +
                 "ID=" + ID +
-                ", ten='" + ten + '\'' +
-                ", namSinh='" + namSinh + '\'' +
-                ", CCCD='" + CCCD + '\'' +
+                ", ten='" + name + '\'' +
+                ", namSinh='" + birthYear + '\'' +
+                ", CCCD='" + citizenId + '\'' +
                 '}';
     }
 }

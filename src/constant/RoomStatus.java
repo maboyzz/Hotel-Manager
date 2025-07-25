@@ -1,13 +1,15 @@
 package constant;
 
-public enum TrangThai {
-    DA_THANH_TOAN("Đã thanh toán"),
-    CHUA_THANH_TOAN("Chưa thanh toán");
+public enum RoomStatus {
+    PHONG_TRONG("Phòng trống"),
+    CHO_XAC_NHAN("Chờ xác nhận"),
+    DA_THUE("Đã thuê"),
+    CHO_DON_DEP("Chờ dọn dẹp"),;
 
 
     private String description;
 
-    TrangThai(String description) {
+    RoomStatus(String description) {
         this.description = description;
     }
 

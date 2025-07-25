@@ -1,100 +1,100 @@
 package Model;
 
-import constant.LoaiPhong;
-import constant.TinhTrang;
+import constant.RoomType;
+import constant.RoomStatus;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Room {
-    private Long ID;
-    private String tenPhong;
-    private LoaiPhong loaiPhong;
-    private String kichThuoc;
-    private TinhTrang trangThai;
-    private String tinhNang;
-    private long giaPhong;
+    private Long id;
+    private String roomName;
+    private RoomType roomType;
+    private String roomSize;
+    private RoomStatus status;
+    private String features;
+    private long price;
 
-    public Room(Long ID, String tenPhong, String kichThuoc, LoaiPhong loaiPhong, TinhTrang trangThai, String tinhNang, long giaPhong) {
-        this.ID = ID;
-        this.tenPhong = tenPhong;
-        this.kichThuoc = kichThuoc;
-        this.loaiPhong = loaiPhong;
-        this.trangThai = trangThai;
-        this.tinhNang = tinhNang;
-        this.giaPhong = giaPhong;
+    public Room(Long id, String roomName, String roomSize, RoomType roomType, RoomStatus status, String features, long price) {
+        this.id = id;
+        this.roomName = roomName;
+        this.roomSize = roomSize;
+        this.roomType = roomType;
+        this.status = status;
+        this.features = features;
+        this.price = price;
     }
 
     public Room() {
     }
 
-    public Long getID() {
-        return ID;
+    public Long getId() {
+        return id;
     }
 
-    public void setID(Long ID) {
-        this.ID = ID;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getTenPhong() {
-        return tenPhong;
+    public String getRoomName() {
+        return roomName;
     }
 
-    public void setTenPhong(String tenPhong) {
-        this.tenPhong = tenPhong;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
-    public LoaiPhong getLoaiPhong() {
-        return loaiPhong;
+    public RoomType getRoomType() {
+        return roomType;
     }
 
-    public void setLoaiPhong(LoaiPhong loaiPhong) {
-        this.loaiPhong = loaiPhong;
+    public void setRoomType(RoomType roomType) {
+        this.roomType = roomType;
     }
 
-    public String getKichThuoc() {
-        return kichThuoc;
+    public String getRoomSize() {
+        return roomSize;
     }
 
-    public void setKichThuoc(String kichThuoc) {
-        this.kichThuoc = kichThuoc;
+    public void setRoomSize(String roomSize) {
+        this.roomSize = roomSize;
     }
 
-    public TinhTrang getTrangThai() {
-        return trangThai;
+    public RoomStatus getStatus() {
+        return status;
     }
 
-    public void setTrangThai(TinhTrang trangThai) {
-        this.trangThai = trangThai;
+    public void setStatus(RoomStatus status) {
+        this.status = status;
     }
 
-    public String getTinhNang() {
-        return tinhNang;
+    public String getFeatures() {
+        return features;
     }
 
-    public void setTinhNang(String tinhNang) {
-        this.tinhNang = tinhNang;
+    public void setFeatures(String features) {
+        this.features = features;
     }
 
-    public long getGiaPhong() {
-        return giaPhong;
+    public long getPrice() {
+        return price;
     }
 
-    public void setGiaPhong(long giaPhong) {
-        this.giaPhong = giaPhong;
+    public void setPrice(long price) {
+        this.price = price;
     }
 
 
     @Override
     public String toString() {
         int width = 60; // độ dài tối đa cho mỗi dòng của "Tính năng"
-        List<String> lines = splitText(tinhNang, width);
+        List<String> lines = splitText(features, width);
 
         StringBuilder sb = new StringBuilder();
 
         // Dòng đầu tiên: in đầy đủ
         sb.append(String.format("| %-2d | %-6s | %-18s | %-10s | %-13s | %-60s | %-9.2f |",
-                ID, tenPhong, loaiPhong, kichThuoc, trangThai, lines.get(0), (double) giaPhong));
+                id, roomName, roomType, roomSize, status, lines.get(0), (double) price));
 
         // Các dòng tiếp theo: chỉ in phần tính năng
         for (int i = 1; i < lines.size(); i++) {

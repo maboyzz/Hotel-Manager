@@ -3,8 +3,8 @@ package Service;
 import DAO.RoomDAO;
 
 import Model.Room;
-import constant.LoaiPhong;
-import constant.TinhTrang;
+import constant.RoomType;
+import constant.RoomStatus;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -39,9 +39,9 @@ public class RoomService {
         Room room = new Room();
         Scanner sc = new Scanner(System.in);
         String tenPhong;
-        LoaiPhong loaiPhong;
+        RoomType roomType;
         String kichThuoc;
-        TinhTrang trangThai;
+        RoomStatus trangThai;
         String tinhNang;
 
 
@@ -50,7 +50,7 @@ public class RoomService {
             tenPhong = sc.nextLine();
 
             if (!isInputBlank(tenPhong) && isValidFullName(tenPhong)) {
-                room.setTenPhong(tenPhong);
+                room.setRoomName(tenPhong);
                 break;
             }
 
@@ -59,10 +59,10 @@ public class RoomService {
             System.out.println("Nhap loai phong (PHONG DON, PHONG DOI, PHONG VIP, PHONG TONG THONG): ");
             String input = sc.nextLine();
             boolean found = false;
-            for (LoaiPhong lp : LoaiPhong.values()) {
+            for (RoomType lp : RoomType.values()) {
                 if (lp.getDescription().equalsIgnoreCase(input.trim())) {
-                    loaiPhong = lp;
-                    room.setLoaiPhong(loaiPhong);
+                    roomType = lp;
+                    room.setRoomType(roomType);
                     found = true;
                     break;
                 }
@@ -75,7 +75,7 @@ public class RoomService {
             kichThuoc = sc.nextLine();
 
             if (!isInputBlank(kichThuoc)) {
-                room.setKichThuoc(kichThuoc);
+                room.setRoomSize(kichThuoc);
                 break;
             }
 
@@ -84,10 +84,10 @@ public class RoomService {
             System.out.println("Nhap trang thai phong (PHONG TRONG , CHO XAC NHAN, DA THUE, CHO DON DEP): ");
             String input = sc.nextLine();
             boolean found = false;
-            for (TinhTrang tt : TinhTrang.values()) {
+            for (RoomStatus tt : RoomStatus.values()) {
                 if (tt.getDescription().equalsIgnoreCase(input.trim())) {
                     trangThai = tt;
-                    room.setTrangThai(trangThai);
+                    room.setStatus(trangThai);
                     found = true;
                     break;
                 }
@@ -100,7 +100,7 @@ public class RoomService {
             tinhNang = sc.nextLine();
 
             if (!isInputBlank(tinhNang) && isValidTinhNang(tinhNang)) {
-                room.setTinhNang(tinhNang);
+                room.setFeatures(tinhNang);
                 break;
             }
 
@@ -114,8 +114,8 @@ public class RoomService {
         }
         Long maxId = 0L;
         for (Room room : roomList) {
-            if (room != null && room.getID() > maxId) {
-                maxId = room.getID();
+            if (room != null && room.getId() > maxId) {
+                maxId = room.getId();
             }
         }
         return maxId;
@@ -126,7 +126,7 @@ public class RoomService {
     public void addRoomSQL() {
         System.out.println("Enter room information : ");
         Room room = inputRoomInfo();
-        room.setGiaPhong(calculateRoomPrice(room.getLoaiPhong()));
+        room.setPrice(calculateRoomPrice(room.getRoomType()));
         new RoomDAO().insertRoom(room);
         System.out.println("Room added to database: " + room);
     }
@@ -166,8 +166,8 @@ public class RoomService {
             Room room = new RoomDAO().findRoomById(Long.parseLong(idPhong));
             if (room != null) {
                 Room roomUpdate = inputRoomInfo();
-                roomUpdate.setID(room.getID());
-                roomUpdate.setGiaPhong(calculateRoomPrice(roomUpdate.getLoaiPhong()));
+                roomUpdate.setId(room.getId());
+                roomUpdate.setPrice(calculateRoomPrice(roomUpdate.getRoomType()));
                 new RoomDAO().updateRoom(roomUpdate);
             } else {
                 System.out.println("Không tìm thấy phòng !!!");
@@ -195,8 +195,8 @@ public class RoomService {
     public void addRoomExcel() {
         System.out.println("Enter room information : ");
         Room room = inputRoomInfo();
-        room.setID(getMaxId() + 1);
-        room.setGiaPhong(calculateRoomPrice(room.getLoaiPhong()));
+        room.setId(getMaxId() + 1);
+        room.setPrice(calculateRoomPrice(room.getRoomType()));
         roomList.add(room);
         System.out.println("Room added to" + room);
     }
@@ -218,13 +218,13 @@ public class RoomService {
         // Add room data to the list
         for (Room room : roomList) {
             data.add(new String[]{
-                    String.valueOf(room.getID()),
-                    room.getTenPhong(),
-                    String.valueOf(room.getLoaiPhong()),
-                    room.getKichThuoc(),
-                    String.valueOf(room.getTrangThai()),
-                    room.getTinhNang(),
-                    String.valueOf(room.getGiaPhong())
+                    String.valueOf(room.getId()),
+                    room.getRoomName(),
+                    String.valueOf(room.getRoomType()),
+                    room.getRoomSize(),
+                    String.valueOf(room.getStatus()),
+                    room.getFeatures(),
+                    String.valueOf(room.getPrice())
             });
         }
         String[] headers = {"ID Phòng", "Tên Phòng", "Loại Phòng", "Kich Thước", "Trạng Thái", "Chức Năng", "Giá Tiền"};
@@ -237,7 +237,7 @@ public class RoomService {
         boolean found = false;
         printHeader();
         for (Room room : roomList) {
-            if (room.getTrangThai().getDescription().equalsIgnoreCase("phòng trống")) {
+            if (room.getStatus().getDescription().equalsIgnoreCase("phòng trống")) {
                 System.out.println(room);
                 found = true;
             }
@@ -254,7 +254,7 @@ public class RoomService {
         System.out.println("Nhập Id phòng :");
         long idPhong = sc.nextLong();
         for (Room room : roomList) {
-            if (room.getID() == idPhong) {
+            if (room.getId() == idPhong) {
                 return room;
             }
         }
@@ -264,7 +264,7 @@ public class RoomService {
     public void deleteRoomByIdExcel() {
         Room room = findRoomByIdExcel();
         if (room != null) {
-            if (room.getTrangThai().equals(TinhTrang.DA_THUE)) {
+            if (room.getStatus().equals(RoomStatus.DA_THUE)) {
                 System.out.println("phòng đang thuê không thể xóa");
                 return;
             }
@@ -276,13 +276,13 @@ public class RoomService {
     public void updateRoomByIdExcel() {
         Room room = findRoomByIdExcel();
         if (room != null) {
-            if (room.getTrangThai().equals(TinhTrang.DA_THUE)) {
+            if (room.getStatus().equals(RoomStatus.DA_THUE)) {
                 System.out.println("Phòng đang được thuê, không thể cập nhật.");
                 return;
             }
             Room roomUpdate = inputRoomInfo();
-            roomUpdate.setID(room.getID());
-            roomUpdate.setTrangThai(room.getTrangThai());
+            roomUpdate.setId(room.getId());
+            roomUpdate.setStatus(room.getStatus());
 
             int index = roomList.indexOf(room);
             if (index != -1) {
@@ -294,14 +294,14 @@ public class RoomService {
         }
     }
 
-    private long calculateRoomPrice(LoaiPhong loaiPhong) {
+    private long calculateRoomPrice(RoomType roomType) {
         long gia = 0L;
-        if (loaiPhong != null) {
-            if (loaiPhong.getDescription().equalsIgnoreCase("phòng đơn")) {
+        if (roomType != null) {
+            if (roomType.getDescription().equalsIgnoreCase("phòng đơn")) {
                 gia = 100000;
-            } else if (loaiPhong.getDescription().equalsIgnoreCase("phòng đôi")) {
+            } else if (roomType.getDescription().equalsIgnoreCase("phòng đôi")) {
                 gia = 200000;
-            } else if (loaiPhong.getDescription().equalsIgnoreCase("phòng vip")) {
+            } else if (roomType.getDescription().equalsIgnoreCase("phòng vip")) {
                 gia = 300000;
             } else {
                 gia = 400000;
@@ -322,15 +322,15 @@ public class RoomService {
                 if (row == null) continue;
 
                 Room room = new Room();
-                room.setID(getLongValue(row.getCell(0)));
-                room.setTenPhong(row.getCell(1).getStringCellValue());
+                room.setId(getLongValue(row.getCell(0)));
+                room.setRoomName(row.getCell(1).getStringCellValue());
                 String loaiPhongStr = row.getCell(2).getStringCellValue();
-                room.setLoaiPhong(LoaiPhong.valueOf(loaiPhongStr));
+                room.setRoomType(RoomType.valueOf(loaiPhongStr));
                 String trangThaiStr = row.getCell(4).getStringCellValue();
-                room.setTrangThai(TinhTrang.valueOf(trangThaiStr));
-                room.setKichThuoc(row.getCell(3).getStringCellValue());
-                room.setTinhNang(row.getCell(5).getStringCellValue());
-                room.setGiaPhong(getLongValue(row.getCell(6)));
+                room.setStatus(RoomStatus.valueOf(trangThaiStr));
+                room.setRoomSize(row.getCell(3).getStringCellValue());
+                room.setFeatures(row.getCell(5).getStringCellValue());
+                room.setPrice(getLongValue(row.getCell(6)));
 
                 roomList.add(room);
             }

@@ -16,7 +16,7 @@ public class CustomerDAO {
         try (Connection conn = DAOConnection.getConnection();
              PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
 
-            checkStmt.setString(1, customer.getCCCD());
+            checkStmt.setString(1, customer.getCitizenId());
             ResultSet rs = checkStmt.executeQuery();
 
             if (rs.next()) {
@@ -35,10 +35,10 @@ public class CustomerDAO {
         try (Connection conn = DAOConnection.getConnection();
              PreparedStatement insertStmt = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS)) {
 
-            insertStmt.setString(1, customer.getTen());
-            insertStmt.setString(2, customer.getNamSinh());
-            insertStmt.setString(3, customer.getCCCD());
-            insertStmt.setInt(4, customer.getSoNguoi());
+            insertStmt.setString(1, customer.getName());
+            insertStmt.setString(2, customer.getBirthYear());
+            insertStmt.setString(3, customer.getCitizenId());
+            insertStmt.setInt(4, customer.getNumberOfPeople());
 
             int affectedRows = insertStmt.executeUpdate();
             if (affectedRows == 0) {
@@ -71,10 +71,10 @@ public class CustomerDAO {
             while (rs.next()) {
                 Customer customer = new Customer();
                 customer.setID(rs.getLong("id"));
-                customer.setTen(rs.getString("ten"));
-                customer.setNamSinh(rs.getString("nam_sinh"));
-                customer.setCCCD(rs.getString("cccd"));
-                customer.setSoNguoi(rs.getInt("so_nguoi"));
+                customer.setName(rs.getString("ten"));
+                customer.setBirthYear(rs.getString("nam_sinh"));
+                customer.setCitizenId(rs.getString("cccd"));
+                customer.setNumberOfPeople(rs.getInt("so_nguoi"));
                 customers.add(customer);
             }
 
@@ -94,10 +94,10 @@ public class CustomerDAO {
             if (rs.next()) {
                 customer = new Customer();
                 customer.setID(rs.getLong("id"));
-                customer.setTen(rs.getString("ten"));
-                customer.setNamSinh(rs.getString("nam_sinh"));
-                customer.setCCCD(rs.getString("cccd"));
-                customer.setSoNguoi(rs.getInt("so_nguoi"));
+                customer.setName(rs.getString("ten"));
+                customer.setBirthYear(rs.getString("nam_sinh"));
+                customer.setCitizenId(rs.getString("cccd"));
+                customer.setNumberOfPeople(rs.getInt("so_nguoi"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,10 +109,10 @@ public class CustomerDAO {
         try (Connection conn = DAOConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, customer.getTen());
-            stmt.setString(2, customer.getNamSinh());
-            stmt.setString(3, customer.getCCCD());
-            stmt.setInt(4, customer.getSoNguoi());
+            stmt.setString(1, customer.getName());
+            stmt.setString(2, customer.getBirthYear());
+            stmt.setString(3, customer.getCitizenId());
+            stmt.setInt(4, customer.getNumberOfPeople());
             stmt.setLong(5, customer.getID());
 
             int rows = stmt.executeUpdate();

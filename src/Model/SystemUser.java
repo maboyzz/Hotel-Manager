@@ -1,19 +1,17 @@
 package Model;
 
-import java.util.Date;
-
 public class SystemUser extends Person{
-    private String chucVu;
-    public SystemUser(Long ID, String ten, String namSinh, String CCCD, String chucVu) {
+    private String role;
+    public SystemUser(Long ID, String ten, String namSinh, String CCCD, String role) {
         super(ID, ten, namSinh, CCCD);
-        this.chucVu = chucVu;
+        this.role = role;
     }
 
-    public String getChucVu() {
-        return chucVu;
+    public String getRole() {
+        return role;
     }
 
-    public void setChucVu(String chucVu) {
-        this.chucVu = chucVu;
+    public void setRole(String role) {
+        this.role = role;
     }
 }

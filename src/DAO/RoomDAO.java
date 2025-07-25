@@ -1,8 +1,8 @@
 package DAO;
 
 import Model.Room;
-import constant.LoaiPhong;
-import constant.TinhTrang;
+import constant.RoomType;
+import constant.RoomStatus;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,12 +17,12 @@ public class RoomDAO {
         String sql = "INSERT INTO phong (ten_phong, kich_thuoc, tinh_nang, trang_thai, loai_phong, gia_phong) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DAOConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, room.getTenPhong());
-            stmt.setString(2, room.getKichThuoc());
-            stmt.setString(3, room.getTinhNang());
-            stmt.setString(4, room.getTrangThai().name());
-            stmt.setString(5, room.getLoaiPhong().name());
-            stmt.setLong(6, room.getGiaPhong());
+            stmt.setString(1, room.getRoomName());
+            stmt.setString(2, room.getRoomSize());
+            stmt.setString(3, room.getFeatures());
+            stmt.setString(4, room.getStatus().name());
+            stmt.setString(5, room.getRoomType().name());
+            stmt.setLong(6, room.getPrice());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -37,13 +37,13 @@ public class RoomDAO {
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Room room = new Room();
-                room.setID(rs.getLong("ma_phong"));
-                room.setTenPhong(rs.getString("ten_phong"));
-                room.setKichThuoc(rs.getString("kich_thuoc"));
-                room.setTinhNang(rs.getString("tinh_nang"));
-                room.setTrangThai(TinhTrang.valueOf(rs.getString("trang_thai")));
-                room.setLoaiPhong(LoaiPhong.valueOf(rs.getString("loai_phong")));
-                room.setGiaPhong(rs.getLong("gia_phong"));
+                room.setId(rs.getLong("ma_phong"));
+                room.setRoomName(rs.getString("ten_phong"));
+                room.setRoomSize(rs.getString("kich_thuoc"));
+                room.setFeatures(rs.getString("tinh_nang"));
+                room.setStatus(RoomStatus.valueOf(rs.getString("trang_thai")));
+                room.setRoomType(RoomType.valueOf(rs.getString("loai_phong")));
+                room.setPrice(rs.getLong("gia_phong"));
                 rooms.add(room);
             }
         } catch (SQLException e) {
@@ -60,13 +60,13 @@ public class RoomDAO {
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Room room = new Room();
-                room.setID(rs.getLong("ma_phong"));
-                room.setTenPhong(rs.getString("ten_phong"));
-                room.setKichThuoc(rs.getString("kich_thuoc"));
-                room.setTinhNang(rs.getString("tinh_nang"));
-                room.setTrangThai(TinhTrang.valueOf(rs.getString("trang_thai")));
-                room.setLoaiPhong(LoaiPhong.valueOf(rs.getString("loai_phong")));
-                room.setGiaPhong(rs.getLong("gia_phong"));
+                room.setId(rs.getLong("ma_phong"));
+                room.setRoomName(rs.getString("ten_phong"));
+                room.setRoomSize(rs.getString("kich_thuoc"));
+                room.setFeatures(rs.getString("tinh_nang"));
+                room.setStatus(RoomStatus.valueOf(rs.getString("trang_thai")));
+                room.setRoomType(RoomType.valueOf(rs.getString("loai_phong")));
+                room.setPrice(rs.getLong("gia_phong"));
                 rooms.add(room);
             }
         } catch (SQLException e) {
@@ -83,13 +83,13 @@ public class RoomDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Room room = new Room();
-                    room.setID(rs.getLong("ma_phong"));
-                    room.setTenPhong(rs.getString("ten_phong"));
-                    room.setKichThuoc(rs.getString("kich_thuoc"));
-                    room.setTinhNang(rs.getString("tinh_nang"));
-                    room.setTrangThai(TinhTrang.valueOf(rs.getString("trang_thai")));
-                    room.setLoaiPhong(LoaiPhong.valueOf(rs.getString("loai_phong")));
-                    room.setGiaPhong(rs.getLong("gia_phong"));
+                    room.setId(rs.getLong("ma_phong"));
+                    room.setRoomName(rs.getString("ten_phong"));
+                    room.setRoomSize(rs.getString("kich_thuoc"));
+                    room.setFeatures(rs.getString("tinh_nang"));
+                    room.setStatus(RoomStatus.valueOf(rs.getString("trang_thai")));
+                    room.setRoomType(RoomType.valueOf(rs.getString("loai_phong")));
+                    room.setPrice(rs.getLong("gia_phong"));
                     return room;
                 }
             }
@@ -99,7 +99,7 @@ public class RoomDAO {
         return null;
     }
 
-    public void updateRoomStatus(Long phongId, TinhTrang trangThaiMoi) {
+    public void updateRoomStatus(Long phongId, RoomStatus trangThaiMoi) {
         String sql = "UPDATE phong SET trang_thai = ? WHERE ma_phong = ?";
 
         try (Connection conn = DAOConnection.getConnection();
@@ -126,15 +126,15 @@ public class RoomDAO {
         try (Connection conn = DAOConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, room.getTenPhong());
-            stmt.setString(2, room.getLoaiPhong().name());
-            stmt.setLong(3, room.getGiaPhong());
-            stmt.setString(4, room.getTrangThai().name());
-            stmt.setString(5, room.getKichThuoc());
-            stmt.setString(6, room.getTinhNang());
+            stmt.setString(1, room.getRoomName());
+            stmt.setString(2, room.getRoomType().name());
+            stmt.setLong(3, room.getPrice());
+            stmt.setString(4, room.getStatus().name());
+            stmt.setString(5, room.getRoomSize());
+            stmt.setString(6, room.getFeatures());
 
 
-            stmt.setLong(7, room.getID());
+            stmt.setLong(7, room.getId());
 
             int rows = stmt.executeUpdate();
 
