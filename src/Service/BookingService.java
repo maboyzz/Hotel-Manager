@@ -62,7 +62,7 @@ public class BookingService {
 
             room = new RoomDAO().findRoomById(phongId);
 
-            if (room == null || !room.getStatus().equals(RoomStatus.PHONG_TRONG)) {
+            if (room == null || !room.getStatus().equals(RoomStatus.AVAILABLE)) {
                 System.out.println("Phòng không tồn tại hoặc không trống. Nhập lại.");
                 phongId = null;
             }
@@ -96,10 +96,10 @@ public class BookingService {
         dp.setRoomId(phongId);
         dp.setCheckInTime(ngayNhan);
         dp.setCheckOutTime(ngayTra);
-        dp.setStatus(BookingStatus.CHUA_THANH_TOAN);
+        dp.setStatus(BookingStatus.UNPAID);
 
         new BookingDAO().insertBooking(dp);
-        new RoomDAO().updateRoomStatus(phongId, RoomStatus.DA_THUE);
+        new RoomDAO().updateRoomStatus(phongId, RoomStatus.OCCUPIED);
 
         System.out.println("✅ Đặt phòng thành công!");
     }
@@ -131,8 +131,8 @@ public class BookingService {
 
         long giaTien = room.getPrice() * soNgay;
 
-        new RoomDAO().updateRoomStatus(room.getId(), RoomStatus.PHONG_TRONG);
-        new BookingDAO().updateBookingStatus(dp.getId(), BookingStatus.DA_THANH_TOAN);
+        new RoomDAO().updateRoomStatus(room.getId(), RoomStatus.AVAILABLE);
+        new BookingDAO().updateBookingStatus(dp.getId(), BookingStatus.PAID);
         System.out.println("Trả phòng thành công!");
         System.out.println("Khách thuê: " + customer.getName() + " có cccd : " + customer.getCitizenId());
         System.out.println("Phòng: " + room.getRoomName());
@@ -198,7 +198,7 @@ public class BookingService {
 
         List<Room> phongTrong = new ArrayList<>();
         for (Room room : roomList) {
-            if (room.getStatus().equals(RoomStatus.PHONG_TRONG)) {
+            if (room.getStatus().equals(RoomStatus.AVAILABLE)) {
                 phongTrong.add(room);
             }
         }
@@ -262,12 +262,12 @@ public class BookingService {
         dp.setRoomId(phongId);
         dp.setCheckInTime(ngayNhan);
         dp.setCheckOutTime(ngayTra);
-        dp.setStatus(BookingStatus.CHUA_THANH_TOAN);
+        dp.setStatus(BookingStatus.UNPAID);
 
         bookingList.add(dp);
 
         // Cập nhật trạng thái phòng
-        room.setStatus(RoomStatus.DA_THUE);
+        room.setStatus(RoomStatus.OCCUPIED);
 
         System.out.println("✅ Đặt phòng thành công!");
     }
@@ -291,7 +291,7 @@ public class BookingService {
                 try {
                     bookingId = Long.parseLong(sc.nextLine());
                     for (Booking dp : bookingList) {
-                        if (dp.getId().equals(bookingId) && dp.getStatus().equals(BookingStatus.CHUA_THANH_TOAN)) {
+                        if (dp.getId().equals(bookingId) && dp.getStatus().equals(BookingStatus.UNPAID)) {
                             booking = dp;
                             break;
                         }
@@ -335,8 +335,8 @@ public class BookingService {
             long giaTien = room.getPrice() * soNgay;
 
             // 6. Cập nhật trạng thái
-            room.setStatus(RoomStatus.PHONG_TRONG);
-            booking.setStatus(BookingStatus.DA_THANH_TOAN);
+            room.setStatus(RoomStatus.AVAILABLE);
+            booking.setStatus(BookingStatus.PAID);
 
             // 7. Hiển thị thông tin đúng
             System.out.println("HÓA ĐƠN THANH TOÁN");

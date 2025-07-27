@@ -8,7 +8,7 @@ import java.util.List;
 
 public class BookingDAO {
     public void insertBooking(Booking dp) {
-        String sql = "INSERT INTO dat_phong ( khach_hang_id, phong_id, ngay_nhan, ngay_tra, ghi_chu,trang_thai) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO booking (customer_id, room_id, check_in, check_out, note, status) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DAOConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, dp.getCustomerId());
@@ -16,14 +16,14 @@ public class BookingDAO {
             stmt.setTimestamp(3, Timestamp.valueOf(dp.getCheckInTime()));
             stmt.setTimestamp(4, Timestamp.valueOf(dp.getCheckOutTime()));
             stmt.setString(5, dp.getNote());
-            stmt.setString(6, BookingStatus.CHUA_THANH_TOAN.name());
+            stmt.setString(6, BookingStatus.UNPAID.name());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
     public Booking findBookingById(Long id) {
-        String sql = "SELECT * FROM dat_phong WHERE id = ?";
+        String sql = "SELECT * FROM booking WHERE booking_id = ?";
         try (Connection conn = DAOConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -32,12 +32,12 @@ public class BookingDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     Booking dp = new Booking();
-                    dp.setId(rs.getLong("id"));
-                    dp.setCustomerId(rs.getLong("khach_hang_id"));
-                    dp.setRoomId(rs.getLong("phong_id"));
-                    dp.setCheckInTime(rs.getTimestamp("ngay_nhan").toLocalDateTime());
-                    dp.setCheckOutTime(rs.getTimestamp("ngay_tra").toLocalDateTime());
-                    dp.setNote(rs.getString("ghi_chu"));
+                    dp.setCustomerId(rs.getLong("customer_id"));
+                    dp.setRoomId(rs.getLong("room_id"));
+                    dp.setCheckInTime(rs.getTimestamp("check_in").toLocalDateTime());
+                    dp.setCheckOutTime(rs.getTimestamp("check_out").toLocalDateTime());
+                    dp.setNote(rs.getString("note"));
+                    dp.setStatus(BookingStatus.valueOf(rs.getString("status")));
                     return dp;
                 }
             }
@@ -51,19 +51,18 @@ public class BookingDAO {
     public List<Booking> findAllBookings() {
         List<Booking> hoadons = new ArrayList<>();
 
-        String sql = "SELECT * FROM dat_phong";
+        String sql = "SELECT * FROM bookings";
         try (Connection conn = DAOConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Booking dp = new Booking();
-                dp.setId(rs.getLong("id"));
-                dp.setCustomerId(rs.getLong("khach_hang_id"));
-                dp.setRoomId(rs.getLong("phong_id"));
-                dp.setCheckInTime(rs.getTimestamp("ngay_nhan").toLocalDateTime());
-                dp.setCheckOutTime(rs.getTimestamp("ngay_tra").toLocalDateTime());
-                dp.setNote(rs.getString("ghi_chu"));
-                dp.setStatus(BookingStatus.valueOf(rs.getString("trang_thai")));
+                dp.setCustomerId(rs.getLong("customer_id"));
+                dp.setRoomId(rs.getLong("room_id"));
+                dp.setCheckInTime(rs.getTimestamp("check_in").toLocalDateTime());
+                dp.setCheckOutTime(rs.getTimestamp("check_out").toLocalDateTime());
+                dp.setNote(rs.getString("note"));
+                dp.setStatus(BookingStatus.valueOf(rs.getString("status")));
                 hoadons.add(dp);
             }
         } catch (SQLException e) {
@@ -74,19 +73,18 @@ public class BookingDAO {
     public List<Booking> findUnpaidBookings() {
         List<Booking> hoadons = new ArrayList<>();
 
-        String sql = "SELECT * FROM dat_phong where trang_thai = 'CHUA_THANH_TOAN'";
+        String sql = "SELECT * FROM bookings where status = 'UNPAID'";
         try (Connection conn = DAOConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Booking dp = new Booking();
-                dp.setId(rs.getLong("id"));
-                dp.setCustomerId(rs.getLong("khach_hang_id"));
-                dp.setRoomId(rs.getLong("phong_id"));
-                dp.setCheckInTime(rs.getTimestamp("ngay_nhan").toLocalDateTime());
-                dp.setCheckOutTime(rs.getTimestamp("ngay_tra").toLocalDateTime());
-                dp.setNote(rs.getString("ghi_chu"));
-                dp.setStatus(BookingStatus.valueOf(rs.getString("trang_thai")));
+                dp.setCustomerId(rs.getLong("customer_id"));
+                dp.setRoomId(rs.getLong("room_id"));
+                dp.setCheckInTime(rs.getTimestamp("check_in").toLocalDateTime());
+                dp.setCheckOutTime(rs.getTimestamp("check_out").toLocalDateTime());
+                dp.setNote(rs.getString("note"));
+                dp.setStatus(BookingStatus.valueOf(rs.getString("status")));
                 hoadons.add(dp);
             }
         } catch (SQLException e) {
@@ -95,7 +93,7 @@ public class BookingDAO {
         return hoadons;
     }
     public void updateBookingStatus(Long dpId, BookingStatus bookingStatusMoi) {
-        String sql = "UPDATE dat_phong SET trang_thai = ? WHERE id = ?";
+        String sql = "UPDATE bookings SET status = ? WHERE id = ?";
 
         try (Connection conn = DAOConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

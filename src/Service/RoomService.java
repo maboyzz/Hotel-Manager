@@ -264,7 +264,7 @@ public class RoomService {
     public void deleteRoomByIdExcel() {
         Room room = findRoomByIdExcel();
         if (room != null) {
-            if (room.getStatus().equals(RoomStatus.DA_THUE)) {
+            if (room.getStatus().equals(RoomStatus.OCCUPIED)) {
                 System.out.println("phòng đang thuê không thể xóa");
                 return;
             }
@@ -276,7 +276,7 @@ public class RoomService {
     public void updateRoomByIdExcel() {
         Room room = findRoomByIdExcel();
         if (room != null) {
-            if (room.getStatus().equals(RoomStatus.DA_THUE)) {
+            if (room.getStatus().equals(RoomStatus.OCCUPIED)) {
                 System.out.println("Phòng đang được thuê, không thể cập nhật.");
                 return;
             }

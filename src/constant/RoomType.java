@@ -1,10 +1,10 @@
 package constant;
 
 public enum RoomType {
-    PHONG_DON("Phòng đơn"),
-    PHONG_DOI("Phòng đôi"),
-    PHONG_VIP("Phòng vip"),
-    PHONG_TONG_THONG("Phòng tổng thống");
+    SINGLE("Phòng đơn"),
+    DOUBLE("Phòng đôi"),
+    VIP("Phòng vip"),
+    PRESIDENTIAL("Phòng tổng thống");
 
     private String description;
 

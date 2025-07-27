@@ -1,11 +1,12 @@
 package constant;
 
 public enum BookingStatus {
-    DA_THANH_TOAN("Đã thanh toán"),
-    CHUA_THANH_TOAN("Chưa thanh toán");
 
+        UNPAID("Chưa thanh toán"),
+        PAID("Đã thanh toán");
 
-    private String description;
+        private final String description;
+
 
     BookingStatus(String description) {
         this.description = description;
@@ -13,9 +14,5 @@ public enum BookingStatus {
 
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 }
